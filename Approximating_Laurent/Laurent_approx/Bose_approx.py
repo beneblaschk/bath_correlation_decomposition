@@ -2,6 +2,12 @@ from sympy import *
 #symbols, sin, lambdify, limit
 import sympy as sp
 from math import * 
+# this is the bose1 branch, where i wanted to verify 
+# whether my old implementation was producing the same results than the updated version
+
+
+
+
 
 x, y, z = symbols('x y z')
 
