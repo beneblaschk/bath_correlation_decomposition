@@ -1,4 +1,2 @@
 this is a test to see how to pull deleted objects
 
-now this is a local change, that shouldn't be pushed, staged or commited
--> when pulled, nothing happend
