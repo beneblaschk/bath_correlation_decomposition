@@ -2,6 +2,11 @@ from sympy import *
 #symbols, sin, lambdify, limit
 import sympy as sp
 from math import * 
+# this is the bose 1 branch, where i want to checkout whether 
+# the old implementation of the bose functio produced the same results 
+# than the updated one, 
+# i have some problems syncronizing
+
 
 x, y, z = symbols('x y z')
 
