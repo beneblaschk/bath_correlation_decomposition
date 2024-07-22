@@ -108,7 +108,7 @@ def bose_recursion(n, index,verbose):
 #bose(1,0) und bose(2,0) funktionieren nicht!! 
 f= f_ref
 #print("bose(11,0,true): Laurent series of Bose function with 3 terms")
-h = bose_recursion(0,1,true)
+h = bose_recursion(10,0,true)
 print(h)
 #print(f"Bose_approx: {h}")
 # h = 1/x
