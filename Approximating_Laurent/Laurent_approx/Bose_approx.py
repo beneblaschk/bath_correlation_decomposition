@@ -66,8 +66,8 @@ def coeff_recursion(k, k_index, verbose) :
      coeff_list[k_index]=aux1 - aux2
      return coeff_recursion(k,k_index+1, verbose) 
 
-print(coeff(10))
-print(coeff_list)
+# print(coeff(10))
+# print(coeff_list)
 
 
 def bose(n):
@@ -107,28 +107,26 @@ def bose_recursion(n, index,verbose):
 
 #bose(1,0) und bose(2,0) funktionieren nicht!! 
 f= f_ref
-#print("bose(11,0,true): Laurent series of Bose function with 3 terms")
-#h = bose_recursion(10,0,true)
-#print(h)
-#print(f"Bose_approx: {h}")
-# h = 1/x
-# print(h)
-# diff_list= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+print("bose(11,0,true): Laurent series of Bose function with 3 terms")
+h = bose_recursion(10,0,true)
+print(h)
+print(f"Bose_approx: {h}")
+diff_list= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-# print("configuration: ")
-# print(f"Bose function")
-# start = -10
-# interval = 1
-# for i in range(0,21): 
-#     print(f"step: f({start+i*interval:.2f})") 
-#     step = start+i*interval
-#     if(step==0):
-#          continue
-#     laurent = (h.subs(x, step))
-#     compare = f.subs(x, step) 
-#     diff = laurent-compare
-#     diff_list[i]=float(diff)
-#     print(f"laurent : {float(laurent):.4f} reference: {float(compare):.4f} diff: {float(diff):.9f}")
+print("configuration: ")
+print(f"Bose function")
+start = -10
+interval = 1
+for i in range(0,21): 
+    print(f"step: f({start+i*interval:.2f})") 
+    step = start+i*interval
+    if(step==0):
+         continue
+    laurent = (h.subs(x, step))
+    compare = f.subs(x, step) 
+    diff = laurent-compare
+    diff_list[i]=float(diff)
+    print(f"laurent : {float(laurent):.4f} reference: {float(compare):.4f} diff: {float(diff):.9f}")
 
 
-#print(diff_list)
+print(diff_list)
