@@ -14,8 +14,8 @@ f_ref = 1/ (1-sp.exp(-x))
 
 a_0=1/12 
 
-#coeff_list = [0.08333333333333333, -0.0013888888888888874, 3.3068783068782915e-05, -8.267195767195603e-07, 2.0876756987866386e-08, -5.284190138685735e-10, 1.3382536530666791e-11, -3.3896802963044296e-13, 8.586062056093802e-15, -2.1748686983715528e-16, 5.509002826470406e-18, 0, 0, 0, 0]
-coeff_list = [0]*15
+coeff_list = [0.08333333333333333, -0.0013888888888888874, 3.3068783068782915e-05, -8.267195767195603e-07, 2.0876756987866386e-08, -5.284190138685735e-10, 1.3382536530666791e-11, -3.3896802963044296e-13, 8.586062056093802e-15, -2.1748686983715528e-16, 5.509002826470406e-18, 0, 0, 0, 0]
+#coeff_list = [0]*15
 # coeff implements \frac{2k+1}{2(2k+3)!} - \sum_{j=0}^{k-1} \frac{a_j}{(2k+1-2j)!} 
 # implement 
 # j is here j-1 to include the first term
@@ -66,19 +66,25 @@ def coeff_recursion(k, k_index, verbose) :
      coeff_list[k_index]=aux1 - aux2
      return coeff_recursion(k,k_index+1, verbose) 
 
-print(coeff(10))
-print(coeff_list)
+#print(coeff(10))
+#print(coeff_list)
 
 
 def bose(n):
      return bose_recursion(n,0,false)
-
 # bose implementt: 1/x + \frac{1}{2} + x \sum_{k=0}^{2N-1}
 # index is here k-2 so i can get the two cases at the beginning included
 # one could also start at -2 i don't know, or have an additional param 
 
 
+
 def bose_recursion(n, index,verbose): 
+    if(index==n): 
+         if(index==0):
+              return a_0
+         return 0
+    
+    # could be more compact, but probably not necessary
     if(index==0):
           if(verbose):
                print(f"bose({index}) of {n}", 1/x)
@@ -89,21 +95,21 @@ def bose_recursion(n, index,verbose):
           return 1/2 + bose_recursion(n, index+1,verbose) 
     
     # implement:  \sum_{k=0}^{n} a_k x^{2k+1}
-    # x wird in den Exponenten verschoben, index ist um zwei nach hinten verschoben
+    # x wird in den Exponenten verschoben 
+    # index ist um zwei nach hinten verschoben
     aux = coeff_list[index-2]* x**(2*((index-2))+1)
     if(verbose):
      print(f"bose({index}) of {n}", aux)
-    if(n-1==index):
-         return aux
-    else:
-         return aux + bose_recursion(n, index+1,verbose)
+    
+    return aux + bose_recursion(n, index+1,verbose)
 
 
 
 #bose(1,0) und bose(2,0) funktionieren nicht!! 
 f= f_ref
 #print("bose(11,0,true): Laurent series of Bose function with 3 terms")
-#h = bose(11,0,true)
+h = bose_recursion(11,0,true)
+print(h)
 #print(f"Bose_approx: {h}")
 # h = 1/x
 # print(h)
