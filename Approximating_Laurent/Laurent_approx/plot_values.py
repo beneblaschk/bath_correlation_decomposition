@@ -15,13 +15,13 @@ reference_values = np.array([0.0000, -0.0001, -0.0003, -0.0009, -0.0025, -0.0068
 # Plot
 plt.figure(figsize=(12, 6))
 
-plt.plot(x_values, laurent_values, 'bo-', label='Laurent Values')
+plt.plot(x_values, laurent_values, 'bo', label='Laurent Values')
 plt.plot(x_values, reference_values, 'r.-', label='Reference Values')
 
 
 plt.xlabel('x')
 plt.ylabel('Value')
-plt.ylim(-5,5)
+plt.ylim(-10,10)
 plt.title('Comparison of Laurent Function and Reference Values')
 plt.legend()
 plt.grid(True)
