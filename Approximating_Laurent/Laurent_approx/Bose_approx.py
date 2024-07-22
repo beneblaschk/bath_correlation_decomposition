@@ -42,7 +42,7 @@ def sum_recursion(k,j,verbose):
      aux = coeff_list[j]/factorial(2*k+1-2*j)
      if(verbose):
           print(f"   sum k:{k} j:{j}= {aux}")
-     return aux + sum_recursion(k,j+1)
+     return aux + sum_recursion(k,j+1,verbose)
 
 
 def coeff(k):
