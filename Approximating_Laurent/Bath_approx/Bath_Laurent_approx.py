@@ -29,10 +29,10 @@ def sum_recursion(n, k, verbose):
      if(verbose):
           print(f"   sum n:{n} k:{k}= {aux}")
      return aux + sum_recursion(n,k+1,verbose)
-s = sum_recursion(10,0,true)
+s = sum_recursion(15,0,true)
 print(s) 
 
 
-bath = pi * s * sp.exp(x)
+bath = s * sp.exp(x)
 
 print(bath)
