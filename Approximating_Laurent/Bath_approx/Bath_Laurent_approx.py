@@ -18,17 +18,21 @@ coeff_list = [0.08333333333333333, -0.0013888888888888874, 3.3068783068782915e-0
 #coeff_list = [0]*15
 
 
-
-
-
-
 def sum(k,verbose):
      return sum_recursion(k,0,verbose)
 
 def sum_recursion(n, k, verbose): 
      if (n==k):
           return 0
-     aux = (-1)^k * coeff_list[k]
+     aux = (-1)**k * coeff_list[k]
+     # aux = coeff_list[k]
      if(verbose):
           print(f"   sum n:{n} k:{k}= {aux}")
      return aux + sum_recursion(n,k+1,verbose)
+s = sum_recursion(10,0,true)
+print(s) 
+
+
+bath = pi * s * sp.exp(x)
+
+print(bath)
