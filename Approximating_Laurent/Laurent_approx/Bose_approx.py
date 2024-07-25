@@ -107,26 +107,57 @@ def bose_recursion(n, index,verbose):
 
 #bose(1,0) und bose(2,0) funktionieren nicht!! 
 f= f_ref
-print("bose(11,0,true): Laurent series of Bose function with 3 terms")
-h = bose_recursion(10,0,true)
-print(h)
-print(f"Bose_approx: {h}")
+# print("bose(11,0,true): Laurent series of Bose function with 3 terms")
+# h = bose_recursion(10,0,true)
+# print(h)
+# print(f"Bose_approx: {h}")
 diff_list= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-print("configuration: ")
-print(f"Bose function")
-start = -10
-interval = 1
-for i in range(0,21): 
-    print(f"step: f({start+i*interval:.2f})") 
-    step = start+i*interval
-    if(step==0):
-         continue
-    laurent = (h.subs(x, step))
-    compare = f.subs(x, step) 
-    diff = laurent-compare
-    diff_list[i]=float(diff)
-    print(f"laurent : {float(laurent):.4f} reference: {float(compare):.4f} diff: {float(diff):.9f}")
+
+#TODO Als methode implementieren mit mehr Parameter, evtl sogar auslagern? 
+
+# print("configuration: ")
+# print(f"Bose function")
+# start = -10
+# interval = 1
+# for i in range(0,21): 
+#     print(f"step: f({start+i*interval:.2f})") 
+#     step = start+i*interval
+#     if(step==0):
+#          continue
+#     laurent = (h.subs(x, step))
+#     compare = f.subs(x, step) 
+#     diff = laurent-compare
+#     diff_list[i]=float(diff)
+#     print(f"laurent : {float(laurent):.4f} reference: {float(compare):.4f} diff: {float(diff):.9f}")
 
 
-print(diff_list)
+# print(diff_list)
+
+def probing(output) : 
+     print("probing: ")
+     #könnte aber auch mehr noch sein, als 1 für bose, 2 für bath what ever 
+     print(f"Bose function")
+     for a in range(1,10):    
+     # ich will jetzt kein verbose haben, deswegen ruf ich die bose alleine auf
+          print(f"Probing with ... {a} terms")
+          h = bose(a) 
+          start = -10
+          interval = 1
+          f= f_ref
+          diff_list= [0]*25
+          for i in range(0,21): 
+               step = start+i*interval
+               if(step==0):
+                    #evtl brauch ich hier noch ein extra catch weil ich ja nicht immer die gleiche Polstelle habe
+                    continue
+               laurent = (h.subs(x, step))
+               compare = f.subs(x, step) 
+               diff = laurent-compare
+               diff_list[i]=float(diff)
+               if(output):
+                    print(f"step:; f({start+i*interval:.2f});laurent; {float(laurent):.4f}; reference:; {float(compare):.4f}; diff:; {float(diff):.9f};")
+
+               else: 
+                    print(f"laurent : {float(laurent):.4f} reference: {float(compare):.4f} diff: {float(diff):.9f}")
+probing(true)
