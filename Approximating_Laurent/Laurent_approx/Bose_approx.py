@@ -135,18 +135,33 @@ diff_list= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 # print(diff_list)
 
 def probing(as_python_list) : 
-     print("probing: ")
      #könnte aber auch mehr noch sein, als 1 für bose, 2 für bath what ever 
-     print(f"Bose function")
-     for a in range(1,3):    
+     #compare
+
+     start = -10
+     interval = 1
+     f= f_ref
+     print(f"reference_values=np.array([",end=' ')
+     for i in range(0,21):
+          step = start+i*interval
+          if(step==0):
+               #evtl brauch ich hier noch ein extra catch weil ich ja nicht immer die gleiche Polstelle habe
+               continue
+          compare = f.subs(x, step) 
+          if(as_python_list):
+               print(f"{float(compare):.4f}", end=', ')
+     print(f"0])")
+
+     #laurent with different terms 
+     for a in range(1,10):    
      # ich will jetzt kein verbose haben, deswegen ruf ich die bose alleine auf
-          print(f"Probing with ... {a} terms")
           h = bose(a) 
           start = -10
           interval = 1
           f= f_ref
           diff_list= [0]*25
-          print(f"lauren_values_{a}=[",end=' ')
+          print(f"lauren_values[{a}]=np.array([",end=' ')
+          #laurent
           for i in range(0,21):
                step = start+i*interval
                if(step==0):
@@ -156,19 +171,9 @@ def probing(as_python_list) :
                compare = f.subs(x, step) 
                diff = laurent-compare
                diff_list[i]=float(diff)
-
-               output = difference =false
                if(as_python_list):
                     print(f"{float(laurent):.4f}", end=', ')
-               else: 
-                    if(output):
-                         if(difference):
-                              print(f"step:; {start+i*interval:.2f};laurent; {float(laurent):.4f}; reference:; {float(compare):.4f}; diff:; {float(diff):.9f};")
-                         else:
-                              print(f"step:; {start+i*interval:.2f};laurent; {float(laurent):.4f}; reference:; {float(compare):.4f};")
-               
-                    else: 
-                         print(f"laurent : {float(laurent):.4f} reference: {float(compare):.4f} diff: {float(diff):.9f}")
-          print(f"0]")
+          print(f"0])")
 
-probing(true)
+
+#probing(true)

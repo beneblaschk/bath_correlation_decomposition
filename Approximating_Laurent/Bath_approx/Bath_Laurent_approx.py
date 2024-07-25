@@ -24,7 +24,7 @@ def sum(k,verbose):
 def sum_recursion(n, k, verbose): 
      if (n==k):
           return 0
-     aux = (-1)**k * coeff_list[k]
+     aux = (-1)**(k+1) * coeff_list[k]
      # aux = coeff_list[k]
      if(verbose):
           print(f"   sum n:{n} k:{k}= {aux}")
