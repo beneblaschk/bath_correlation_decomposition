@@ -19,17 +19,19 @@ coeff_list = [0.08333333333333333, -0.0013888888888888874, 3.3068783068782915e-0
 
 
 def sum(k,verbose):
-     return sum_recursion(k,0,verbose)
+     return sum_recursion(k,0,1,verbose)
 
-def sum_recursion(n, k, verbose): 
+def sum_recursion(n, k, gamma,verbose): 
      if (n==k):
           return 0
-     aux = (-1)**(k+1) * coeff_list[k]
+     
+     # (-1)^{k+1} a_k \gamma^{2k+1} 
+     aux = (-1)**(k+1) * coeff_list[k]*(gamma)**(2*k+1)
      # aux = coeff_list[k]
      if(verbose):
           print(f"   sum n:{n} k:{k}= {aux}")
-     return aux + sum_recursion(n,k+1,verbose)
-s = sum_recursion(15,0,true)
+     return aux + sum_recursion(n,k+1,gamma,verbose)
+s = sum_recursion(11,0,(3),true)
 print(s) 
 
 
