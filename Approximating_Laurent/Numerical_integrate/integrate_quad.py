@@ -28,10 +28,34 @@ def bose_geschlossen(x):
 def spectral_density(x): 
         return x/(x**2+1)
 
-def bath_int(w):
-        return spectral_density(w) * (bose_geschlossen(w)-1) * numpy.exp((- (0+1j)*w))
+def bath_int(w,t):
+        return spectral_density(w) * (bose_geschlossen(w)-1) * numpy.exp((- (0+1j)*w*t))
 
-#def f(x):
+
+def bath(t) :
+   result_1 = integrate.quad(bath_int, -50, 0,args=t)
+   result_2 = integrate.quad(bath_int, 0, 50,args=t)
+   return result_1[0]+result_2[0]
+
+#print(bath(1))
+
+
+def plot() : 
+    for i in range (1,100):
+        print(f"{float(i*0.1):.2f} & {float(bath(i*0.1)):.5f}\\\\")
+    return 0
+
+plot()
+#print(bath(5))
+
+
+
+
+
+
+
+
+    #def f(x):
     #return numpy.exp(x)
 
 # for i in range (1,100):
@@ -43,11 +67,3 @@ def bath_int(w):
 
 # result = integrate.quad(bath_int, 0, sc.inf)
 # print(result)
-
-for i in range (1,100):
-    def bath(t) :
-        result_1 = integrate.quad(bath_int, -i*1000000, 0)
-        result_2 = integrate.quad(bath_int, 0, i*100000)
-        return result_1[0]+result_2[0]
-
-    print(bath(1))
