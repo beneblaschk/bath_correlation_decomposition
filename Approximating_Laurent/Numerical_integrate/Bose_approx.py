@@ -177,4 +177,4 @@ def probing(as_python_list) :
 
 
 #probing(true)
-print(bose(10))
+#print(bose(10))
