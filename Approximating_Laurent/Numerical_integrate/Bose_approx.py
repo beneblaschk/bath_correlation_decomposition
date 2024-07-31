@@ -70,15 +70,15 @@ def coeff_recursion(k, k_index, verbose) :
 # print(coeff_list)
 
 
-def bose(n):
-     return bose_recursion(n,0,false)
+def bose(n,x):
+     return bose_recursion(n,0,x,false)
 # bose implementt: 1/x + \frac{1}{2} + x \sum_{k=0}^{2N-1}
 # index is here k-2 so i can get the two cases at the beginning included
 # one could also start at -2 i don't know, or have an additional param 
 
 
-
-def bose_recursion(n, index,verbose): 
+# i added the x in the call 
+def bose_recursion(n, index,x,verbose): 
     if(n<0 or index<0 or n < index):
          return 0
     if(index==n): 
@@ -88,11 +88,11 @@ def bose_recursion(n, index,verbose):
     if(index==0):
           if(verbose):
                print(f"bose({index}) of {n}", 1/x)
-          return 1/x + bose_recursion(n, index+1,verbose)
+          return 1/x + bose_recursion(n, index+1,x,verbose)
     if(index==1):
           if(verbose): 
                print(f"bose({index}) of {n}", 1/2)
-          return 1/2 + bose_recursion(n, index+1,verbose) 
+          return 1/2 + bose_recursion(n, index+1,x,verbose) 
     
     # implement:  \sum_{k=0}^{n} a_k x^{2k+1}
     # x wird in den Exponenten verschoben 
@@ -101,7 +101,7 @@ def bose_recursion(n, index,verbose):
     if(verbose):
      print(f"bose({index}) of {n}", aux)
     
-    return aux + bose_recursion(n, index+1,verbose)
+    return aux + bose_recursion(n, index+1,x,verbose)
 
 
 
