@@ -5,71 +5,64 @@ import sympy
 
 import Bose_approx
 x, y = sympy.symbols('x y')
-
-#coeff_list = [0.08333333333333333, -0.0013888888888888874, 3.3068783068782915e-05, -8.267195767195603e-07, 2.0876756987866386e-08, -5.284190138685735e-10, 1.3382536530666791e-11, -3.3896802963044296e-13, 8.586062056093802e-15, -2.1748686983715528e-16, 5.509002826470406e-18, 0, 0, 0, 0]
-#coeff_list = [0]*15
-
-
- # f = sympy.utilities.lambdify(x,x+1)
-
-#def bath(t):
-    #return bose_approx(t)
-
-def transform_sym_call(f) : 
-    f = sympy.utilities.lambdify(x,f)
-    return f
-
-
-def bose_geschlossen(x): 
-        return 1/(1-numpy.exp(-x))
-def bose_approx(): 
-        h= Bose_approx.bose(10,x)
-        return transform_sym_call(h)
-
+lower_integral_limit = -50
+upper_integral_limit = 50
+number_laurent_terms = 3
+#for the plot: 
+step_size =0.1
+number_of_steps = 10
 
 def spectral_density(x): 
         return x/(x**2+1)
 
-def bath_int(w,t):
-        return spectral_density(w) * (bose_geschlossen(w)-1) * numpy.exp((- (0+1j)*w*t))
+# bath function with closed bose 
+def bose_closed(x): 
+        return 1/(1-numpy.exp(-x))
 
-def bath_int_approx(w,t):
-        return spectral_density(w) * (bose_approx()(w)-1) * numpy.exp((- (0+1j)*w*t))
+def bath_integralfunction_closed(w,t):
+        return spectral_density(w) * (bose_closed(w)-1) * numpy.exp((- (0+1j)*w*t))
 
+def bath_closed(t) :
+   result_1 = integrate.quad(bath_integralfunction_closed, lower_integral_limit, 0,args=t)
+   result_2 = integrate.quad(bath_integralfunction_closed, 0, upper_integral_limit,args=t)
+   return (1/2j) *(result_1[0]+result_2[0])
 
+# bath function with approxed bose 
+def transform_symbolic_to_callable(f) : 
+    f = sympy.utilities.lambdify(x,f)
+    return f
 
-def bath(t) :
-   result_1 = integrate.quad(bath_int, -50, 0,args=t)
-   result_2 = integrate.quad(bath_int, 0, 50,args=t)
+def bose_approxed(): 
+        h= Bose_approx.bose(number_laurent_terms,x)
+        return transform_symbolic_to_callable(h)
+
+def bath_integralfunction_approxed(w,t):
+        return spectral_density(w) * (bose_approxed()(w)-1) * numpy.exp((- (0+1j)*w*t))
+
+def bath_approxed(t) :
+   result_1 = integrate.quad(bath_integralfunction_approxed, lower_integral_limit, 0,args=t)
+   result_2 = integrate.quad(bath_integralfunction_approxed, 0, upper_integral_limit,args=t)
    return result_1[0]+result_2[0]
 
-
-def bath_approx(t) :
-   result_1 = integrate.quad(bath_int_approx, -50, 0,args=t)
-   result_2 = integrate.quad(bath_int_approx, 0, 50,args=t)
+def bath_approxed_verbose_limits(t,lower_integral_limit, upper_integral_limit) :
+   result_1 = integrate.quad(bath_integralfunction_approxed, lower_integral_limit, 0,args=t)
+   result_2 = integrate.quad(bath_integralfunction_approxed, 0, upper_integral_limit,args=t)
    return result_1[0]+result_2[0]
-
-#print(bath(1))
 
 
 def plot(function_to_plot) : 
-    for i in range (1,100):
-        print(f"{float(i*0.1):.2f} & {float(function_to_plot(i*0.1)):.5f}\\\\")
+    for i in range (1,number_of_steps):
+        print(f"{float(i*step_size):.2f} & {float(function_to_plot(i*step_size)):.5f}\\\\")
     return 0
 
-plot(bath_approx)
-#print(bose_approx()(5))
 
+# Find out: How stabil is the inside integral with different upper and lower limits! 
+number_of_steps=10
+step_size = 10
 
-    #def f(x):
-    #return numpy.exp(x)
+def plot_integral_limits():
+    for i in range (1,number_of_steps):
+        print(f"{float(1):.2f} & integral limits: & {i*step_size} & {float(bath_approxed_verbose_limits(1,-i*step_size,i*step_size)):.5f}\\\\")
+    return 0     
 
-# for i in range (1,100):
-#     k=i*1000
-#     result = integrate.quad(bath_int, -k, 0)
-#     print(f"{k}-0: {result[0]}")
-
-
-
-# result = integrate.quad(bath_int, 0, sc.inf)
-# print(result)
+plot_integral_limits()
