@@ -67,8 +67,13 @@ def plot_integral_limits():
 
 #plot_integral_limits()
 
+lower_integral_limit= -1000
+upper_integral_limit = -0.01
+distance_to_signularity = 0.01 
 
-result1 = integrate.quad(bose_closed, -5,-0.01)[0]
-result2 = integrate.quad(bose_closed, 0.01,5)[0]
 
-print(result1+result2)
+result1 = integrate.quad(bose_closed, upper_integral_limit,0-distance_to_signularity)
+result2 = integrate.quad(bose_closed, 0+distance_to_signularity, upper_integral_limit) 
+print(result1)
+
+
