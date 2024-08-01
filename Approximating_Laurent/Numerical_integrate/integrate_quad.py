@@ -68,5 +68,7 @@ def plot_integral_limits():
 #plot_integral_limits()
 
 
-result = integrate.quad(bose_closed, -5,5)
-print(result) 
+result1 = integrate.quad(bose_closed, -5,-0.01)[0]
+result2 = integrate.quad(bose_closed, 0.01,5)[0]
+
+print(result1+result2)
