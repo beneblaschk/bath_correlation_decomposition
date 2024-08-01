@@ -5,8 +5,9 @@ import sympy
 
 import Bose_approx
 #commit log:
-#added a only_positiv_integral if-clause
-#plotted the approxed bose bath function
+# added new methods for only integrating the bose function
+# changed privat to private 
+# added a decoy function for bose_closed because it doesnt take a tau usually
 
 x, y = sympy.symbols('x y')
 #for the integral
@@ -31,18 +32,33 @@ def spectral_density(x):
 def bose_closed(x): 
         return 1/(1-numpy.exp(-x))
 
+def bose_closed_with_decoy_tau(x,t): 
+        return 1/(1-numpy.exp(-x))
+
 def bath_integralfunction_closed(w,t):
         return spectral_density(w) * (bose_closed(w)-1) * numpy.exp((- (0+1j)*w*t))
+
+
+def bose_closed_verbose_integral_limits(t, lower_integral_limit, upper_integral_limit, only_positive_integral) :
+    result_1 = [0,0]
+    if not only_positive_integral:
+        result_1 = integrate.quad(bose_closed_with_decoy_tau, lower_integral_limit, 0-distance_to_signularity,args=t)
+    result_2 = integrate.quad(bose_closed_with_decoy_tau, 0+distance_to_signularity, upper_integral_limit,args=t)
+    return bath_front_faktor *(result_1[0]+result_2[0])
+
+
 
 def bath_closed(t) :
    result_1 = integrate.quad(bath_integralfunction_closed, lower_integral_limit, 0-distance_to_signularity,args=t)
    result_2 = integrate.quad(bath_integralfunction_closed, 0+distance_to_signularity, upper_integral_limit,args=t)
    return bath_front_faktor *(result_1[0]+result_2[0])
 
-def bath_closed_verbose_integral_limits(t,lower_integral_limit, upper_integral_limit, only_positiv_integral):
+
+
+def bath_closed_verbose_integral_limits(t,lower_integral_limit, upper_integral_limit, only_positive_integral):
    result_1 = [0,0]
-   if not only_positiv_integral:
-    result_1 = integrate.quad(bath_integralfunction_closed, lower_integral_limit, 0-distance_to_signularity,args=t)
+   if not only_positive_integral:
+        result_1 = integrate.quad(bath_integralfunction_closed, lower_integral_limit, 0-distance_to_signularity,args=t)
    result_2 = integrate.quad(bath_integralfunction_closed, 0+distance_to_signularity, upper_integral_limit,args=t)
    return bath_front_faktor *(result_1[0]+result_2[0])  
 
@@ -96,7 +112,7 @@ def ploting_integral_limits_with_different_taus (k,function_integrated_verbose_i
     #aktuell 10-100
 
 print(start_table_string)
-ploting_integral_limits_with_different_taus(5,bath_approxed_verbose_integral_limits,True)
+ploting_integral_limits_with_different_taus(2,bose_closed_verbose_integral_limits,True)
 print(end_table_string)
 
 
