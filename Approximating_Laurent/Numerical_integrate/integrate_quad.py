@@ -5,9 +5,7 @@ import sympy
 
 import Bose_approx
 #commit log:
-# added new methods for only integrating the bose function
-# changed privat to private 
-# added a decoy function for bose_closed because it doesnt take a tau usually
+# by-hand constructed approxed bose -> TODO to fix the transform form symbolic
 
 x, y = sympy.symbols('x y')
 #for the integral
@@ -22,8 +20,8 @@ bath_front_faktor = 1/(numpy.pi)
 step_size =0.1
 number_of_steps = 10
 
-start_table_string ="\\begin{array}{|c|c|c|}\hline\\textbf{Time} & \\textbf{Activity} & \\textbf{Duration} \\\\"
-end_table_string = "\hline\end{array}"
+start_table_string ="\\begin{array}{|c|c|c|}\\hline\\textbf{Time} & \\textbf{Activity} & \\textbf{Duration} \\\\"
+end_table_string = "\\hline\\end{array}"
 
 def spectral_density(x): 
         return x/(x**2+1)
@@ -71,6 +69,23 @@ def bose_approxed():
         h= Bose_approx.bose(number_laurent_terms,x)
         return transform_symbolic_to_callable(h)
 
+def bose_approxed_with_decoy_tau(x,t): 
+        x, y, z = sympy.symbols('x y z')
+        h= Bose_approx.bose(number_laurent_terms,x)
+        return transform_symbolic_to_callable(h)
+
+
+def bose_approxed_with_decoy_tau_manual(x,t):
+        return -0.00138888888888889*x**3 + 0.0833333333333333*x + 0.5 + 1/x
+
+def bose_approxed_verbose_integral_limits(t, lower_integral_limit, upper_integral_limit, only_positive_integral) :
+    result_1 = [0,0]
+    if not only_positive_integral:
+        result_1 = integrate.quad(bose_approxed_with_decoy_tau_manual, lower_integral_limit, 0-distance_to_signularity,args=t)
+    result_2 = integrate.quad(bose_approxed_with_decoy_tau_manual, 0+distance_to_signularity, upper_integral_limit,args=t)
+    return bath_front_faktor *(result_1[0]+result_2[0])
+
+
 def bath_integralfunction_approxed(w,t):
         return spectral_density(w) * (bose_approxed()(w)-1) * numpy.exp((- (0+1j)*w*t))
 
@@ -89,7 +104,7 @@ def bath_approxed_verbose_integral_limits(t,lower_integral_limit, upper_integral
 
 def plot(function_to_plot) : 
     for i in range (1,number_of_steps):
-        print(f"{float(i*step_size):.2f} & {float(function_to_plot(i*step_size)):.5f}\\\\")
+        print(f"{float(i*step_size):.2f} & {float(function_to_plot(i*step_size)):.1f}\\\\")
     return 0
 
 
@@ -101,7 +116,7 @@ def plot_integral_limits(t, integral_function_verbose_limits, only_positiv_integ
     for i in range (1,number_of_steps):
         # plotting integrals with different integration limits at the point t =1
         # discarding the imaginary part
-        print(f"{float(t):.2f} & \\text{{integral limits:}} & {i*step_size} & {float(integral_function_verbose_limits(t,-i*step_size,i*step_size,only_positiv_integral).real):.5f}\\\\")
+        print(f"{float(t):.0f} & \\text{{limit:}} & {i*step_size} & {float(integral_function_verbose_limits(t,-i*step_size,i*step_size,only_positiv_integral).real):.0f}\\\\")
     return 0     
 
 
@@ -111,9 +126,14 @@ def ploting_integral_limits_with_different_taus (k,function_integrated_verbose_i
         plot_integral_limits(i, function_integrated_verbose_integral_limits,only_positiv_integral)
     #aktuell 10-100
 
-print(start_table_string)
-ploting_integral_limits_with_different_taus(2,bose_closed_verbose_integral_limits,True)
-print(end_table_string)
+
+def plot_bose (): 
+    print(start_table_string)
+    ploting_integral_limits_with_different_taus(2,bose_approxed_verbose_integral_limits,True)
+    print(end_table_string)
+
+
+plot_bose()
 
 
 def testing_simple_integral () :
