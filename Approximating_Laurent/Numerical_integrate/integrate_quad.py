@@ -65,4 +65,8 @@ def plot_integral_limits():
         print(f"{float(1):.2f} & integral limits: & {i*step_size} & {float(bath_approxed_verbose_limits(1,-i*step_size,i*step_size)):.5f}\\\\")
     return 0     
 
-plot_integral_limits()
+#plot_integral_limits()
+
+
+result = integrate.quad(bose_closed, -5,5)
+print(result) 
