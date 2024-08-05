@@ -5,7 +5,6 @@ import sympy
 
 import Bose_approx
 #commit log:
-# made the step size and the number of steps only zentral 
 
 x, y = sympy.symbols('x y')
 #for the integral
