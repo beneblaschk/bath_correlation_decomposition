@@ -13,7 +13,8 @@ lower_integral_limit = -50
 upper_integral_limit = 50
 number_laurent_terms = 3
 distance_to_signularity = 0.01 
-bath_front_faktor = 1/(numpy.pi)
+# bath_front_faktor = 1/(numpy.pi)
+bath_front_faktor = 1
 
 
 #for the plot: 
@@ -76,7 +77,8 @@ def bose_approxed_with_decoy_tau(x,t):
 
 
 def bose_approxed_with_decoy_tau_manual(x,t):
-        return -0.00138888888888889*x**3 + 0.0833333333333333*x + 0.5 + 1/x
+        # changed to n=2 
+        return 0.5 + 1/x
 
 def bose_approxed_verbose_integral_limits(t, lower_integral_limit, upper_integral_limit, only_positive_integral) :
     result_1 = [0,0]
