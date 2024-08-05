@@ -5,7 +5,7 @@ import sympy
 
 import Bose_approx
 #commit log:
-# by-hand constructed approxed bose -> TODO to fix the transform form symbolic
+# made the step size and the number of steps only zentral 
 
 x, y = sympy.symbols('x y')
 #for the integral
@@ -18,8 +18,8 @@ bath_front_faktor = 1
 
 
 #for the plot: 
-step_size =0.1
-number_of_steps = 10
+number_of_steps= 10
+step_size = 100
 
 start_table_string ="\\begin{array}{|c|c|c|}\\hline\\textbf{Time} & \\textbf{Activity} & \\textbf{Duration} \\\\"
 end_table_string = "\\hline\\end{array}"
@@ -109,10 +109,6 @@ def plot(function_to_plot) :
         print(f"{float(i*step_size):.2f} & {float(function_to_plot(i*step_size)):.1f}\\\\")
     return 0
 
-
-# Find out: How stabil is the inside integral with different upper and lower limits! 
-number_of_steps=10
-step_size = 100
 
 def plot_integral_limits(t, integral_function_verbose_limits, only_positiv_integral):
     for i in range (1,number_of_steps):
