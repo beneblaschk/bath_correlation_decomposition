@@ -11,7 +11,7 @@ x, y = sympy.symbols('x y')
 lower_integral_limit = -100
 upper_integral_limit = - lower_integral_limit
 distance_to_signularity = 0.01 
-bath_front_faktor = 1#1/(numpy.pi)
+bath_front_faktor = 1/(numpy.pi)
 #bath_front_faktor = 1
 
 
@@ -19,7 +19,7 @@ bath_front_faktor = 1#1/(numpy.pi)
 number_of_steps= 10
 step_size = 1
 
-start_table_string ="\\begin{array}{|c|c|c|}\\hline\\textbf{Time} & \\textbf{Activity} & \\textbf{Duration} \\\\"
+start_table_string ="\\begin{array}{|c|c|}\\hline\\tau & \\alpha\\\\"
 end_table_string = "\\hline\\end{array}"
 
 def spectral_density(x): 
