@@ -47,26 +47,41 @@ residual_debye_values= [0.5146497652308826, 0.5410364229439333, 0.56877595352763
 
 #label = [["numerical_n=g=1",'r'],["residual_debye_0.5_1",'b'], ["residual_debye_1_1",'g']]
 
-label = [['1_1', 'r'], ['1_2', 'g'], ['1_3', 'b'], ['1_4', 'y'], ['1_5', 'm']]
+
 
 
 # Example usage
 file_path = 'mathjax_array.txt'  # Replace with the path to your text file
-data = parser.parse_mathjax_array_from_file("Pipeline/mathjax_array.txt")
-deb = [0]*6
+#data = parser.parse_mathjax_array_from_file("Pipeline/mathjax_array.txt")
+
+# mach mal mal nur 3 
+eta = 1
+gamma_max=10
+gamma_steps = 0.12
+
+colors = ['r', 'g', 'b', 'y', 'm', 'c', 'k', 'w', 'r', 'g']
+
+label = [] 
+
+for i in range(0,gamma_max):
+    label.append([f"{eta}_{i*gamma_steps}",f"{colors[i]}"])
+
+print(label)
+
+deb = [0]*gamma_max
 τ_values = np.arange(0.1,9.9, 0.1)
 
 data = [[round(i, 1)] for i in np.arange(0.1, 10.0, 0.1)]
 
-for g in range (0,5):
-    deb[g] = deb_plot.plot_debye(1,g)
+for g in range (0,gamma_max):
+    deb[g] = deb_plot.plot_debye(1,g*gamma_steps)
 
 
 for i in range(0,len(data)):
-    for g in range(0,4):
+    for g in range(0,gamma_max):
         data[i].append(deb[g][i])
 
-print(data)
+#print(data)
 plot_data(data,label)
 
 
