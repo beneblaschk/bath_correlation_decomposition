@@ -25,5 +25,7 @@ def parse_mathjax_array_from_file(file_path):
         result.append([float(col.strip()) for col in columns])
 
     return result
+if __name__ == "__main__":
+    # this won't be run when imported
+    print(parse_mathjax_array_from_file("Pipeline/mathjax_array.txt"))
 
-print(parse_mathjax_array_from_file("Pipeline/mathjax_array.txt"))
