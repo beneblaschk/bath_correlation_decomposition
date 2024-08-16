@@ -4,8 +4,23 @@ import Plotting_debye as deb_plot
 import numpy as np
 #git_upload
 
+#commit: 
+# color fixed here with colormap -> color gradient
+# layout changed to dotted lines and bigger points
+
+# Create a colormap
+cmap = plt.get_cmap('viridis')
+
 
 def show(data, label):
+
+    for i in range(0,len(label)):
+        label[i][1] = cmap(i/len(label))
+
+
+    show_color(data, label)
+
+def show_color(data, label): 
     """
     input: more dimensional array 
     first row is always tau values 
@@ -31,12 +46,8 @@ def show(data, label):
     # Create a plot
     plt.figure(figsize=(14, 9))
     #iterating overall values 
-
-    print(dimension)
-    print(label)
-    print(label[0][1])
     for i in range(0, dimension-1):
-        plt.plot(tau_values, alpha_values[i], marker='.', linestyle='None', color=label[i][1], label=label[i][0])
+        plt.plot(tau_values, alpha_values[i], marker='o', linestyle='--', color=label[i][1], label=label[i][0])
 
 
 
