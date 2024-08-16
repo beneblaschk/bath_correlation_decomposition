@@ -8,11 +8,7 @@ import integrate_quad_cleaned
 #git_upload
 
 #commit: 
-# ich hab das label angepasst
-# hab die numerische funktion hinzugefügt
-# die funktion etwas angepasst
-# die funktion wird auch ausgeführt im if case
-# und am ende wird nochmal die anzahl der Graphen hochgesetzt
+
 
 
 def format(compare,spectral_density,bose,integral):
