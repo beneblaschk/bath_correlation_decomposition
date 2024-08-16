@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import Parser_table_to_list as parser
 import Plotting_debye as deb_plot
 import numpy as np
-
+#git_upload
 
 
 def show(data, label):
