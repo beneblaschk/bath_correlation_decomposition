@@ -16,7 +16,7 @@ def show(data, label):
         label[i][1] = cmap(i/len(label))
 
 
-    show_color(data, label,True)
+    show_color(data, label,False)
 
 def show_color(data, label,verbose): 
     """
@@ -35,9 +35,8 @@ def show_color(data, label,verbose):
     tau_values = [row[0] for row in data]
     if verbose:
         print(f"tau valuse: {tau_values}")
-    dimension = len(tau_values)
+    dimension = len(data[0])
     
-    dimension = 2
     if verbose: 
         print(f"dimension: {dimension}")
     alpha_values = []
