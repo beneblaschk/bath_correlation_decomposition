@@ -59,9 +59,9 @@ def show_color(data, label,verbose):
     for i in range(0, dimension-1):
         if verbose:
             print(f"alpha({i}) {alpha_values[0][i]}")
-        #plt.plot(tau_values, alpha_values[i], marker='o', linestyle='--', color=label[i][1], label=label[i][0])
+        plt.plot(tau_values, alpha_values[i], marker='o', linestyle='--', color=label[i][1], label=label[i][0])
 
-    plt.plot(tau_values, alpha_values[0], marker='o', linestyle='--', color= 'r', label="red")
+    #plt.plot(tau_values, alpha_values[0], marker='o', linestyle='--', color= 'r', label="red")
     #plt.plot([i for i in range(1, 3)], [4,5,6], marker='o', linestyle='None', color= 'b', label="red")
 
     #ich versteh überhaupt nicht was grade mit dem plotter abgeht, er plottet einfach meine werte nicht
