@@ -6,12 +6,6 @@ import universal_plot
 import math
 #git_upload
 
-#git changed
-#changed again
-
-# mach mal mal nur 3 
-# Parameter compare
-
 #commit: 
 
 
@@ -26,8 +20,8 @@ def format(compare,spectral_density,bose,integral):
     """
     tau_range = [0]*3 
     tau_range[0] = 0.0
-    tau_range[1] = 2.1
-    tau_range[2] = 0.5
+    tau_range[1] = 2
+    tau_range[2] = 0.1
 
     parameter_range = []
     parameter_range.append([])
@@ -37,8 +31,8 @@ def format(compare,spectral_density,bose,integral):
     parameter_range.append([])
     parameter_range[1] = [0]*3
 
-    parameter_range[1][0] = 2.0  # gamma =0,10.0, 0.1
-    parameter_range[1][1] = 2.5
+    parameter_range[1][0] = 1 # gamma =0,10.0, 0.1
+    parameter_range[1][1] = 4
     parameter_range[1][2] = 0.5
 
 
@@ -50,7 +44,7 @@ def format(compare,spectral_density,bose,integral):
 
 def format_advanced_parameters(compare,spectral_density,bose,integral,tau_range, parameter_range):
 
-    format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, 0)
+    format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, 1)
 
 
 def format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, config):
@@ -133,9 +127,10 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 
     label = [] 
     # nur label
-    for i in range(0,number_of_graphs):
-        label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
-    #TODO: color is managed in universal plot -> but also here -> left empty 
+    if integral=='residual':
+        for i in range(0,number_of_graphs):
+            label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
+             #TODO: color is managed in universal plot -> but also here -> left empty 
 
  
 
