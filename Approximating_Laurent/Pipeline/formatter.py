@@ -5,6 +5,8 @@ import numpy as np
 import universal_plot
 #git_upload
 
+#git changed
+#changed again
 
 # mach mal mal nur 3 
 # Parameter compare
