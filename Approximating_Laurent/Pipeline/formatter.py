@@ -3,6 +3,7 @@ import Parser_table_to_list as parser
 import Plotting_debye as deb_plot
 import numpy as np
 import universal_plot
+import math
 #git_upload
 
 #git changed
@@ -12,10 +13,7 @@ import universal_plot
 # Parameter compare
 
 #commit: 
-# Iterations über die Graphen gehen von 0 bis number_of_grahs (zb 4)
-# Das gilt für label, alpha_werte, alpha_values into the data_set 
-# adding the number_of_datapoints -> einheitlich wieviele tau werte es geben soll
-# number_of_data_points are relevant for: creating empty data_set, adding alphavalues to the data set
+
 
 
 def format(compare,spectral_density,bose,integral):
@@ -28,8 +26,8 @@ def format(compare,spectral_density,bose,integral):
     """
     tau_range = [0]*3 
     tau_range[0] = 0.0
-    tau_range[1] = 1.5
-    tau_range[2] = 0.1
+    tau_range[1] = 8
+    tau_range[2] = 0.5
 
     parameter_range = []
     parameter_range.append([])
@@ -39,9 +37,12 @@ def format(compare,spectral_density,bose,integral):
     parameter_range.append([])
     parameter_range[1] = [0]*3
 
-    parameter_range[1][0] = 3  # gamma =0,10.0, 0.1
-    parameter_range[1][1] = 5
+    parameter_range[1][0] = 2.0  # gamma =0,10.0, 0.1
+    parameter_range[1][1] = 2.5
     parameter_range[1][2] = 0.5
+
+
+
 
     format_advanced_parameters(compare,spectral_density,bose,integral,tau_range, parameter_range)
 
@@ -49,10 +50,10 @@ def format(compare,spectral_density,bose,integral):
 
 def format_advanced_parameters(compare,spectral_density,bose,integral,tau_range, parameter_range):
 
-    format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, False)
+    format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, 0)
 
 
-def format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, verbose):
+def format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, config):
     """
     input: configuration
     compare: what is compared
@@ -61,11 +62,21 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     integral: residual - numerical
     tau_range (start,end, step-size)
     parametere_range (start, end, step-size) []
-
     verbose output possible
     number of graphs and parameters
+    config == 0 > no output
+    config == 1 > limited parameter output
     """
+    verbose = False
+    if config<2:
+        verbose = False
+    else: 
+        verbose = True 
 
+
+    if config == 1: 
+        print(f"tau: {tau_range[0]},{tau_range[1]},{tau_range[2]}") 
+        print(f"gamma: {parameter_range[1][0]},{parameter_range[1][1]}, {parameter_range[1][2]}")
 
     calculate_alpha_values = [] 
     
@@ -83,7 +94,16 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     tau_step_size = tau_range[2]
     if verbose:
         print(f"tau values: from {tau_range[0]} to {tau_range[1]} in {tau_range[2]} steps")
-        print(f"resulting in {int((tau_range[1]-tau_range[0])/tau_range[2])} data points")
+
+       # hier werden die tau-Werte eingespeist
+    data_set = [[round(i, 1)] for i in np.arange(tau_start,tau_end, tau_step_size)]
+    #TODO: Warum ist hier -0.1 bei tau end?
+    # jetzt doch über die länge des arrays gelöst!
+    number_of_datapoints = len(data_set)# ((tau_end-tau_start)/tau_step_size)
+    if verbose:
+        print(f"empty data_set: \n {data_set}")
+        print(f"resulting in {number_of_datapoints} number of datapoints")
+
 
 
     eta = parameter_range[0][0]
@@ -95,12 +115,12 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 
 
     number_of_graphs = int((gamma_max-gamma_start)/gamma_steps)
-
-    # es wird wohl immer der letzte punkt rausgelassen, 
-    #TODO fix the boundaries
-    number_of_datapoints = int((tau_end-tau_start)/tau_step_size)-1
     if verbose:
         print(f"resulting in {number_of_graphs} graphs")
+    # es wird wohl immer der letzte punkt rausgelassen, 
+    #TODO fix the boundaries
+
+
 
     #werte nicht immer neu ausrechnen sondern einfach ablegen und falls vorhanden dann verwenden!
 
@@ -117,12 +137,7 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
     #TODO: color is managed in universal plot -> but also here -> left empty 
 
-    # hier werden die tau-Werte eingespeist
-    data_set = [[round(i, 1)] for i in np.arange(tau_start,tau_end-0.1, tau_step_size)]
-    #TODO: Warum ist hier -0.1 bei tau end?
-    if verbose:
-        print(f"empty data_set: \n {data_set}")
-
+ 
 
     #Hier werden die alpha Werte eingespeist
     alpha_values = [0]*number_of_graphs
