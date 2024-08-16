@@ -4,10 +4,15 @@ import Plotting_debye as deb_plot
 import numpy as np
 import universal_plot
 import math
+import integrate_quad_cleaned
 #git_upload
 
 #commit: 
-
+# ich hab das label angepasst
+# hab die numerische funktion hinzugefügt
+# die funktion etwas angepasst
+# die funktion wird auch ausgeführt im if case
+# und am ende wird nochmal die anzahl der Graphen hochgesetzt
 
 
 def format(compare,spectral_density,bose,integral):
@@ -132,20 +137,47 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
             label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
              #TODO: color is managed in universal plot -> but also here -> left empty 
 
+    if integral=='compare':
+    #also dieser bereich soll verglichen werden: 
+            label.append([f"numerical",''])
+            label.append([f"residual",''])
+
+
+
+            #parameter starts
+            parameter_range[0][0] = 1
+            parameter_range[1][0] = 1
+
+            calculate_alpha_values.append(integrate_quad_cleaned.bath_closed_tau_set)
+            calculate_alpha_values.append(deb_plot.plot_debye_advanced_parameter)
+                   
+            number_of_graphs = 1
+
+
  
 
     #Hier werden die alpha Werte eingespeist
     alpha_values = [0]*number_of_graphs
+
+
+    # ich überschreibe hier die daten wieder!
     for g in range (0,number_of_graphs):
         alpha_values[g] = calculate_alpha_values[0](1,g*gamma_steps+gamma_start,tau_range)
+        if integral == 'compare':
+            alpha_values.append(calculate_alpha_values[1](tau_range)) #gamma, and eta are already one
+        # man könnte eben hier einfach appenden! 
+
         if verbose :
             print(f"alpha_value[{g}][2] = {alpha_values[g][2]} for this gamma: {g*gamma_steps+gamma_start}")
+    
+  
+
+
 
     if verbose: 
         print("alpha_values")
         print(alpha_values)
-
-
+    number_of_graphs =2
     # Hier werden die alpha werte an das leeere Data_set angehängt, sodass zu jedem tau wert der richtige alphawert passt 
     for i in range(0,number_of_datapoints):
         for g in range(0,number_of_graphs):
@@ -158,9 +190,9 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 
 if __name__ == "__main__":
     print('executed in main formatter...')
+    print('format(0, debye,laurent,compare)')
 
-
-    format(0,'debye','laurent','residual')
+    format(0,'debye','laurent','compare')
 
 
 
