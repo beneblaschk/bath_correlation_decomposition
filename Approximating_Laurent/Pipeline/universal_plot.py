@@ -16,7 +16,7 @@ def show(data, label):
         label[i][1] = cmap(i/len(label))
 
 
-    show_color(data, label,True)
+    show_color(data, label,False)
 
 def show_color(data, label,verbose): 
     """

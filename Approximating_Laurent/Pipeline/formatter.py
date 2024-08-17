@@ -8,8 +8,7 @@ import integrate_quad_cleaned
 #git_upload
 
 #commit: 
-# number_of_graphs bezieht sich jetzt wirklich auf die graphen die geplottet werden
-# alpha_values ist jetzt ein array mit wirklich den verschiedenen werten dann. 
+
 
 
 def format(compare,spectral_density,bose,integral):
