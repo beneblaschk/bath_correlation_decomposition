@@ -8,7 +8,8 @@ import integrate_quad_cleaned
 #git_upload
 
 #commit: 
-
+# number_of_graphs bezieht sich jetzt wirklich auf die graphen die geplottet werden
+# alpha_values ist jetzt ein array mit wirklich den verschiedenen werten dann. 
 
 
 def format(compare,spectral_density,bose,integral):
@@ -45,7 +46,7 @@ def format(compare,spectral_density,bose,integral):
 
 def format_advanced_parameters(compare,spectral_density,bose,integral,tau_range, parameter_range):
 
-    format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, 1)
+    format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range,2)
 
 
 def format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, config):
@@ -143,11 +144,12 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
             #parameter starts
             parameter_range[0][0] = 1
             parameter_range[1][0] = 1
-
-            calculate_alpha_values.append(integrate_quad_cleaned.bath_closed_tau_set)
-            calculate_alpha_values.append(deb_plot.plot_debye_advanced_parameter)
+            number_of_graphs = 2
+            calculate_alpha_values = [0]*number_of_graphs
+            calculate_alpha_values[0]=integrate_quad_cleaned.bath_closed_tau_set
+            calculate_alpha_values[1]=deb_plot.plot_debye_advanced_parameter
                    
-            number_of_graphs = 1
+
 
 
  
@@ -155,13 +157,21 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     #Hier werden die alpha Werte eingespeist
     alpha_values = [0]*number_of_graphs
 
+    # man könnte auch einfach die number_of_graphs literally nehmen und einfach dann nicht die gammas
+    # variiern sondern wirklich die zwei veschiedenen graphen rein hauen
+
 
     # ich überschreibe hier die daten wieder!
+    if verbose:
+        print(f"number of graphs {number_of_graphs}")
     for g in range (0,number_of_graphs):
-        alpha_values[g] = calculate_alpha_values[0](1,g*gamma_steps+gamma_start,tau_range)
         if integral == 'compare':
-            alpha_values.append(calculate_alpha_values[1](tau_range)) #gamma, and eta are already one
-        # man könnte eben hier einfach appenden! 
+            alpha_values[g] = calculate_alpha_values[g](1,gamma_start,tau_range)
+        # jetzt werden einfach zwei verschiedene funktionen verwendet um zu plotten 
+        else: 
+            #normaler case mit gamma variation 
+            alpha_values[g] = calculate_alpha_values[1](1,g*gamma_steps+gamma_start,tau_range)
+
 
         if verbose :
             print(f"alpha_value[{g}][2] = {alpha_values[g][2]} for this gamma: {g*gamma_steps+gamma_start}")
