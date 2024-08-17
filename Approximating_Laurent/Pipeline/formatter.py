@@ -5,9 +5,11 @@ import numpy as np
 import universal_plot
 import math
 import integrate_quad_cleaned
+import sys
 #git_upload
 
 #commit: 
+# added the command line print out verbose
 
 
 
@@ -36,16 +38,11 @@ def format(compare,spectral_density,bose,integral):
     parameter_range[1][1] = 4
     parameter_range[1][2] = 0.5
 
-
-
-
-    format_advanced_parameters(compare,spectral_density,bose,integral,tau_range, parameter_range)
-
-
-
-def format_advanced_parameters(compare,spectral_density,bose,integral,tau_range, parameter_range):
-
-    format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range,2)
+    if len(sys.argv)>1:
+        verbose= int(sys.argv[1])
+    else:
+        verbose = 0
+    format_advanced_parameter(compare,spectral_density,bose,integral,tau_range, parameter_range,verbose)
 
 
 def format_advanced_parameter(compare, spectral_density, bose, integral, tau_range, parameter_range, config):
@@ -163,14 +160,14 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     # ich überschreibe hier die daten wieder!
     if verbose:
         print(f"number of graphs {number_of_graphs}")
+    
     for g in range (0,number_of_graphs):
         if integral == 'compare':
             alpha_values[g] = calculate_alpha_values[g](1,gamma_start,tau_range)
         # jetzt werden einfach zwei verschiedene funktionen verwendet um zu plotten 
         else: 
             #normaler case mit gamma variation 
-            alpha_values[g] = calculate_alpha_values[1](1,g*gamma_steps+gamma_start,tau_range)
-
+            alpha_values[g] = calculate_alpha_values[0](1,g*gamma_steps+gamma_start,tau_range)
 
         if verbose :
             print(f"alpha_value[{g}][2] = {alpha_values[g][2]} for this gamma: {g*gamma_steps+gamma_start}")
@@ -195,9 +192,11 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 
 if __name__ == "__main__":
     print('executed in main formatter...')
-    print('format(0, debye,laurent,compare)')
 
-    format(0,'debye','laurent','compare')
+    print('format(0,debye,laurent,residual')
 
+    format(0,'debye','laurent','residual')
+
+        
 
 
