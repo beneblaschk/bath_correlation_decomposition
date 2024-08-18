@@ -9,11 +9,7 @@ import sys
 #git_upload
 
 #commit: 
-# fixed the boundary bug for tau ending values
-# the method numpy.arrange() always excludes the end point
-# the alternative method linespace() only takes number of data_points-> thats confusing with my steps
-# at the beginning i added one step to the end step as fix
-# also thought about making the verbose more elaborate, decided against it
+# removed a number_of_graph =2  (was for the num vs res) 
 
 
 
@@ -27,7 +23,7 @@ def format(compare,spectral_density,bose,integral):
     """
     tau_range = [0]*3 
     tau_range[0] = 0.0
-    tau_range[1] = 2        #es sollte eigenlich bis 2 gehen jetzt
+    tau_range[1] = 2      #es sollte eigenlich bis 2 gehen jetzt
     tau_range[2] = 0.1
 
     parameter_range = []
@@ -197,7 +193,7 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     if verbose: 
         print("alpha_values")
         print(alpha_values)
-    number_of_graphs =2
+    #number_of_graphs =2  -> ich glaub das war nur für den anderen fall mit compare
     # Hier werden die alpha werte an das leeere Data_set angehängt, sodass zu jedem tau wert der richtige alphawert passt 
     for i in range(0,number_of_datapoints):
         for g in range(0,number_of_graphs):
