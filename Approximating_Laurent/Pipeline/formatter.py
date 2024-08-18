@@ -219,7 +219,7 @@ if __name__ == "__main__":
 
     if plot=="num_debye":
         spectral_density="debye"
-        approximation = "closed" 
+        approximation = "laurent" 
         integral="compare"
 
 
