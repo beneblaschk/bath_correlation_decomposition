@@ -206,10 +206,26 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 if __name__ == "__main__":
     print('executed in main formatter...')
 
-    print('format(0,debye,laurent,residual')
+    plot = "num_compare"
 
-    #format(0,'debye','laurent','residual')
-    format(0,'debye','laurent','compare')
+    if len(sys.argv)>2:
+        plot = sys.argv[2]
+        print(plot)
+
+    if plot=="num_compare":
+        spectral_density = "compare" 
+        approximation = "closed" 
+        integral="numerical"
+
+    if plot=="num_debye":
+        spectral_density="debye"
+        approximation = "closed" 
+        integral="compare"
+
+
+    print(f"format({spectral_density},{approximation},{integral}")
+    format(0,spectral_density,approximation,integral)
+
 
         
 

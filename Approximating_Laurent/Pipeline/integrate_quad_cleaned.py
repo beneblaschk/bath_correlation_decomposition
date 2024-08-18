@@ -6,8 +6,7 @@ import sympy
 
 #import Bose_approx
 #commit log:
-# added two new spectral densities-> now we have three
-# i added a new line with spectral density in it
+
 
 x, y = sympy.symbols('x y')
 #for the integral
@@ -67,6 +66,19 @@ def bath_closed_tau_set(eta,gamma,tau_range):
       return [bath_closed(t) for t in t_values]
 
 def bath_closed_tau_set_sd_select(sd,tau_range):
+      """
+      numerical approximated bath 
+      sd: spectral density 
+      debye - ohmic - ultra_violet_cutoff
+      """
+      if sd=="debye":
+        sd = debye_sd
+      if sd=="ohmic":
+        sd = ohmic_sd
+      if sd=="ultra_violet_cutoff":
+        sd = ultra_violet_cutoff_sd
+
+
       t_values = numpy.arange(tau_range[0], tau_range[1],tau_range[2])
       return [bath_closed_sd_select(t,sd) for t in t_values]
 
