@@ -9,7 +9,11 @@ import sys
 #git_upload
 
 #commit: 
-# added the command line print out verbose
+# fixed the boundary bug for tau ending values
+# the method numpy.arrange() always excludes the end point
+# the alternative method linespace() only takes number of data_points-> thats confusing with my steps
+# at the beginning i added one step to the end step as fix
+# also thought about making the verbose more elaborate, decided against it
 
 
 
@@ -23,7 +27,7 @@ def format(compare,spectral_density,bose,integral):
     """
     tau_range = [0]*3 
     tau_range[0] = 0.0
-    tau_range[1] = 2
+    tau_range[1] = 2        #es sollte eigenlich bis 2 gehen jetzt
     tau_range[2] = 0.1
 
     parameter_range = []
@@ -42,6 +46,9 @@ def format(compare,spectral_density,bose,integral):
         verbose= int(sys.argv[1])
     else:
         verbose = 0
+
+    # mabye könnte man hier auch eine liste von attributen machen
+    # empty_data set, alpha_values usw. 
     format_advanced_parameter(compare,spectral_density,bose,integral,tau_range, parameter_range,verbose)
 
 
@@ -60,6 +67,8 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     config == 1 > limited parameter output
     """
     verbose = False
+
+
     if config<2:
         verbose = False
     else: 
@@ -81,6 +90,8 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         return
 
     # Tau Werte 
+    tau_range[1] = tau_range[1] +tau_range[2]  # added one element because numpy.arrange always exclude the endpoint
+
     tau_start = tau_range[0]
     tau_end = tau_range[1]
     tau_step_size = tau_range[2]
@@ -88,6 +99,7 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         print(f"tau values: from {tau_range[0]} to {tau_range[1]} in {tau_range[2]} steps")
 
        # hier werden die tau-Werte eingespeist
+    
     data_set = [[round(i, 1)] for i in np.arange(tau_start,tau_end, tau_step_size)]
     #TODO: Warum ist hier -0.1 bei tau end?
     # jetzt doch über die länge des arrays gelöst!
@@ -152,6 +164,9 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 
     #Hier werden die alpha Werte eingespeist
     alpha_values = [0]*number_of_graphs
+    if verbose: 
+        print(alpha_values)
+
 
     # man könnte auch einfach die number_of_graphs literally nehmen und einfach dann nicht die gammas
     # variiern sondern wirklich die zwei veschiedenen graphen rein hauen
@@ -164,13 +179,16 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     for g in range (0,number_of_graphs):
         if integral == 'compare':
             alpha_values[g] = calculate_alpha_values[g](1,gamma_start,tau_range)
+
         # jetzt werden einfach zwei verschiedene funktionen verwendet um zu plotten 
         else: 
             #normaler case mit gamma variation 
+
             alpha_values[g] = calculate_alpha_values[0](1,g*gamma_steps+gamma_start,tau_range)
 
         if verbose :
-            print(f"alpha_value[{g}][2] = {alpha_values[g][2]} for this gamma: {g*gamma_steps+gamma_start}")
+            print(f"alpha_value[{g}] = {alpha_values[g]} len: {len(alpha_values[g])}")
+            #print(f"alpha_value[{g}][2] = {alpha_values[g][2]} for this gamma: {g*gamma_steps+gamma_start}")
     
   
 
