@@ -6,11 +6,12 @@ import sympy
 
 #import Bose_approx
 #commit log:
-# deleted plot info, step size and so on 
-# deleted bath_closed_integral with fixed spectral density 
-# deleted bath_closed with fixed spectral density 
-# deleted bath_closed_tau_set with fixed sd
-# deleted plotter 
+# deleted spectral density you can use debye now as main 
+# added a line for approximation vs closed
+# added an approximated bose function
+
+
+
 
 x, y = sympy.symbols('x y')
 #for the integral
@@ -34,25 +35,30 @@ def ohmic_sd (x) :
 def ultra_violet_cutoff_sd (x) :
       return pow(numpy.exp(1),2) *x *(2 - x)
 
-def spectral_density(x): 
-        return x/(x**2+1)
-
 # bath function with closed bose 
 def bose_closed(x): 
         return 1/(1-numpy.exp(-x))
 
-def bath_integralfunction_closed_sd_select(w,t,sd):
-        return sd(w) * (bose_closed(w)-1) * numpy.exp((- (0+1j)*w*t))
+def bose_approxed(x):
+        # changed to n=2 
+        return 0.5 + 1/x
 
-def bath_closed_sd_select(t, sd): 
-        result_1 = integrate.quad(bath_integralfunction_closed_sd_select, lower_integral_limit, 0-distance_to_signularity,args=(t,sd))
-        result_2 = integrate.quad(bath_integralfunction_closed_sd_select, 0+distance_to_signularity, upper_integral_limit,args=(t,sd))
+def bath_integralfunction(w,t,sd,approximated):
+        if not approximated:
+                return sd(w) * (bose_closed(w)-1) * numpy.exp((- (0+1j)*w*t))
+        if approximated:
+                return sd(w) * (bose_approxed(w)-1) * numpy.exp((- (0+1j)*w*t))
+        return "Error"
+
+def bath(t, sd, approximated): 
+        result_1 = integrate.quad(bath_integralfunction, lower_integral_limit, 0-distance_to_signularity,args=(t,sd,approximated))
+        result_2 = integrate.quad(bath_integralfunction, 0+distance_to_signularity, upper_integral_limit,args=(t,sd,approximated))
         #i think i only need to integrate from 0 right??
         # i need to check wether the arguments are correctly transmitted
         
         return bath_front_faktor *(result_1[0]+result_2[0])
 
-def bath_closed_tau_set_sd_select(sd,tau_range):
+def bath_tau_set(sd,approximated,tau_range):
       """
       numerical approximated bath 
       sd: spectral density 
@@ -67,7 +73,7 @@ def bath_closed_tau_set_sd_select(sd,tau_range):
 
 
       t_values = numpy.arange(tau_range[0], tau_range[1],tau_range[2])
-      return [bath_closed_sd_select(t,sd) for t in t_values]
+      return [bath(t,sd,approximated) for t in t_values]
 
 
 if __name__ == "__main__":
