@@ -40,7 +40,8 @@ def plot_debye_advanced_parameter(n,g, tau_range) :
 #for i in range(1,7):
 #    print(plot_debye(1,i))
 
-
+def plot_residual(sd,approximated,tau_range):
+    plot_debye_advanced_parameter(1,1,tau_range)
 if __name__ == "__main__":
     
     #plot_debye(1,3)

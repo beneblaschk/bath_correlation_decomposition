@@ -9,8 +9,8 @@ import sys
 #git_upload
 
 #commit: 
-# spectral density can now be also different !!
-# changed it to bath_tau_set
+# ich glaub ich hab ausversehen die data_poitns und gaphs verwechselt
+
 
 sd = [0]*3
 sd[0] = "debye"
@@ -67,34 +67,19 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     config == 0 > no output
     config == 1 > limited parameter output
     """
-
+    # verbose configurations: 
+    # 0 nichts
+    # 1 limited 
+    # 2 full verbose
     verbose = False
-    if config<2:
-        verbose = False
-    else: 
-        verbose = True 
-
 
     if config == 1: 
         print(f"tau: {tau_range[0]},{tau_range[1]},{tau_range[2]}") 
         print(f"gamma: {parameter_range[1][0]},{parameter_range[1][1]}, {parameter_range[1][2]}")
-
-
     
+    if config==2:
+        verbose = True
 
-    # Bose should be closed for now
-    approximated = False
-
-    calculate_alpha_values = [] 
-    
-    if spectral_density=='debye':
-        if verbose:
-            print('spectral density: debye spectral')
-        calculate_alpha_values.append(deb_plot.plot_debye_advanced_parameter)
-        #man sollte hier tau einfach mit geben 
-    else:
-        if spectral_density=="compare":
-            calculate_alpha_values= [0]*3
 
     # Tau Werte 
     tau_range[1] = tau_range[1] +tau_range[2]  # added one element because numpy.arrange always exclude the endpoint
@@ -108,14 +93,11 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
        # hier werden die tau-Werte eingespeist
     
     data_set = [[round(i, 1)] for i in np.arange(tau_start,tau_end, tau_step_size)]
-    #TODO: Warum ist hier -0.1 bei tau end?
-    # jetzt doch über die länge des arrays gelöst!
+
     number_of_datapoints = len(data_set)# ((tau_end-tau_start)/tau_step_size)
     if verbose:
         print(f"empty data_set: \n {data_set}")
         print(f"resulting in {number_of_datapoints} number of datapoints")
-
-
 
     eta = parameter_range[0][0]
     gamma_start = parameter_range[1][0]
@@ -124,10 +106,10 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     if verbose:
         print(f"gamma values: from {parameter_range[1][0]} to {parameter_range[1][1]} in {parameter_range[1][2]} steps")
 
+    # that is only when parameter compare haben!
 
-    number_of_graphs = int((gamma_max-gamma_start)/gamma_steps)
-    if verbose:
-        print(f"resulting in {number_of_graphs} graphs")
+    #number_of_graphs = int((gamma_max-gamma_start)/gamma_steps)
+
     # es wird wohl immer der letzte punkt rausgelassen, 
     #TODO fix the boundaries
 
@@ -149,30 +131,99 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
             label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
              #TODO: color is managed in universal plot -> but also here -> left empty 
 
-    if integral=='compare':
-    #also dieser bereich soll verglichen werden: 
-            label.append([f"numerical",''])
-            label.append([f"residual",''])
+
+    # We have 3 configurations:
+    # spectral density 
+    # bose
+    # integral 
+
+    #mabye also sd parameter compare
+
+    # each of them can be fixed, or compare to compare it
+
+    # spectral density-> einfach auf die jeweilige setzen dann 
+    # bose -> approximated or not
+    # integral -> selecting the right function 
 
 
 
-            #parameter starts
-            parameter_range[0][0] = 1
-            parameter_range[1][0] = 1
-            number_of_graphs = 2
-            calculate_alpha_values = [0]*number_of_graphs
-            calculate_alpha_values[0]=integrate_quad_cleaned.bath_closed_tau_set
-            calculate_alpha_values[1]=deb_plot.plot_debye_advanced_parameter
-                   
 
     if spectral_density=="compare":
-            label.append([f"{sd[0]}",''])
-            label.append([f"{sd[1]}",''])
-            label.append([f"{sd[2]}",''])        
-            calculate_alpha_values[0]=integrate_quad_cleaned.bath_tau_set
-            calculate_alpha_values[1]=integrate_quad_cleaned.bath_tau_set
-            calculate_alpha_values[2]=integrate_quad_cleaned.bath_tau_set
-            number_of_graphs =3
+        print("not yet implemented")
+        return
+    #therefore is a spectral_density now fixed
+    sd = spectral_density # mabye also the array
+    if verbose:
+        print('spectral density: debye spectral')
+
+    if bose=="compare":
+        number_of_graphs=2
+        if verbose:
+            print('compare bose')
+        # we only have two graphs to compare
+
+    # Bose should be closed for now
+    approximated = False
+
+    if integral=="compare":
+        print("not yet implemented")
+        return
+    if integral=="residual":
+        calculator_function= deb_plot.plot_residual
+        return
+        # adding the residual plotter has only debye -> because advanced calculation...
+
+    if integral=="numerical":
+        if verbose:
+            print("adding integratie quad to calculator_function")
+        calculator_function= integrate_quad_cleaned.bath_tau_set
+    
+    if verbose:
+        print(f"resulting in {number_of_graphs} graphs")
+
+    # now the calculator function is applied
+    calculate_alpha_values = [0]*number_of_graphs
+    for i in range (0, number_of_graphs):
+        if bose=="compare":
+            calculate_alpha_values[i]= calculator_function(sd,not (i%2==0),tau_range)    # ich will mit false anfangen (closed), modulo weil dann ist es einmal true und einmal false
+            continue
+        if spectral_density=="compare":
+            calculate_alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
+        else:
+            calculate_alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
+        # integral sollte eigentlich fine sein schon weil die funktion ja schon richtig ausgewählt ist
+     
+
+    if verbose:
+        print(f"calculator_function: {calculator_function}")
+        print(f"calculator an stelle{calculate_alpha_values}")
+    
+
+
+    # if integral=='compare':
+    # #also dieser bereich soll verglichen werden: 
+    #         label.append([f"numerical",''])
+    #         label.append([f"residual",''])
+
+
+
+    #         #parameter starts
+    #         parameter_range[0][0] = 1
+    #         parameter_range[1][0] = 1
+    #         number_of_graphs = 2
+    #         calculate_alpha_values = [0]*number_of_graphs
+    #         calculate_alpha_values[0]=integrate_quad_cleaned.bath_closed_tau_set
+    #         calculate_alpha_values[1]=deb_plot.plot_debye_advanced_parameter
+                   
+
+    # if spectral_density=="compare":
+    #         label.append([f"{sd[0]}",''])
+    #         label.append([f"{sd[1]}",''])
+    #         label.append([f"{sd[2]}",''])        
+    #         calculate_alpha_values[0]=integrate_quad_cleaned.bath_tau_set
+    #         calculate_alpha_values[1]=integrate_quad_cleaned.bath_tau_set
+    #         calculate_alpha_values[2]=integrate_quad_cleaned.bath_tau_set
+    #         number_of_graphs =3
  
 
     #Hier werden die alpha Werte eingespeist
@@ -233,7 +284,6 @@ if __name__ == "__main__":
     if len(sys.argv)>2:
         plot = sys.argv[2]
         print(plot)
-    print(plot)
     if plot=="num_compare":
         spectral_density = "compare" 
         bose = "closed" 
@@ -248,8 +298,6 @@ if __name__ == "__main__":
         spectral_density="debye"
         bose="compare"
         integral="numerical"
-    
-    print(bose)
     print(f"format({spectral_density},{bose},{integral})")
     format(0,spectral_density,bose,integral)
 

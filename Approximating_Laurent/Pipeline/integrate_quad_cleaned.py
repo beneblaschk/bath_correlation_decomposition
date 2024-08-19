@@ -6,9 +6,7 @@ import sympy
 
 #import Bose_approx
 #commit log:
-# deleted spectral density you can use debye now as main 
-# added a line for approximation vs closed
-# added an approximated bose function
+
 
 
 
@@ -69,12 +67,11 @@ def bath_tau_set(sd,approximated,tau_range):
       if sd=="ohmic":
         sd = ohmic_sd
       if sd=="ultra_violet_cutoff":
-        sd = ultra_violet_cutoff_sd
-
+        sd = ultra_violet_cutoff_sd 
 
       t_values = numpy.arange(tau_range[0], tau_range[1],tau_range[2])
       return [bath(t,sd,approximated) for t in t_values]
 
 
 if __name__ == "__main__":
-                print("main")
+     print("main")
