@@ -6,7 +6,7 @@ import sympy
 
 #import Bose_approx
 #commit log:
-
+# now we want to do closed and approxed together! 
 
 x, y = sympy.symbols('x y')
 #for the integral
@@ -32,7 +32,7 @@ def ohmic_sd (x) :
       return numpy.pi*x*numpy.exp(-x/5)
 
 def ultra_violet_cutoff_sd (x) :
-      return numpy.exp**2 *x *(2 - x)
+      return pow(numpy.exp(1),2) *x *(2 - x)
 
 def spectral_density(x): 
         return x/(x**2+1)
@@ -53,8 +53,8 @@ def bath_closed(t) :
    return bath_front_faktor *(result_1[0]+result_2[0])
 
 def bath_closed_sd_select(t, sd): 
-        result_1 = integrate.quad(bath_integralfunction_closed_sd_select, lower_integral_limit, 0-distance_to_signularity,args=[t,sd])
-        result_2 = integrate.quad(bath_integralfunction_closed_sd_select, 0+distance_to_signularity, upper_integral_limit,args=[t,sd])
+        result_1 = integrate.quad(bath_integralfunction_closed_sd_select, lower_integral_limit, 0-distance_to_signularity,args=(t,sd))
+        result_2 = integrate.quad(bath_integralfunction_closed_sd_select, 0+distance_to_signularity, upper_integral_limit,args=(t,sd))
         #i think i only need to integrate from 0 right??
         # i need to check wether the arguments are correctly transmitted
         
