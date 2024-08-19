@@ -128,15 +128,15 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 
     label = [] 
     # nur label
-    if integral=='residual':
-        label= ["closed",'']
+    #if integral=='residual':
+        #label= ["closed",'']
         # for i in range(0,number_of_graphs):
         #     label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
              #TODO: color is managed in universal plot -> but also here -> left empty 
     if bose=='compare':
         label= [["closed",''],["approximated",'']]
     if integral=="residual":
-        label= [["debye closed residual",'']]
+        label= [[f"{spectral_density} {bose} {integral}",'']]
 
     # We have 3 configurations:
     # spectral density 
@@ -173,6 +173,8 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         approximated = False
     else:
         approximated=True
+
+    # actually i can also leave this as a text, dont need to interchange the whole time
     if integral=="compare":
         print("not yet implemented")
         return
