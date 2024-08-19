@@ -6,6 +6,7 @@ import universal_plot
 import math
 import integrate_quad_cleaned
 import sys
+import residual
 #git_upload
 
 #commit: 
@@ -128,11 +129,14 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     label = [] 
     # nur label
     if integral=='residual':
-        for i in range(0,number_of_graphs):
-            label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
+        label= ["closed",'']
+        # for i in range(0,number_of_graphs):
+        #     label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
              #TODO: color is managed in universal plot -> but also here -> left empty 
     if bose=='compare':
         label= [["closed",''],["approximated",'']]
+    if integral=="residual":
+        label= [["debye closed residual",'']]
 
     # We have 3 configurations:
     # spectral density 
@@ -165,15 +169,18 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         # we only have two graphs to compare
 
     # Bose should be closed for now
-    approximated = False
-
+    if bose=='closed':
+        approximated = False
+    else:
+        approximated=True
     if integral=="compare":
         print("not yet implemented")
         return
     if integral=="residual":
-        calculator_function= deb_plot.plot_residual
-        return
-        # adding the residual plotter has only debye -> because advanced calculation...
+        calculator_function= residual.calculate_bath_tau_set
+        number_of_graphs=1
+        #rn only one plot
+        #rn gamma, eta = 1
 
     if integral=="numerical":
         if verbose:
@@ -192,7 +199,10 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         if spectral_density=="compare":
             alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
         else:
-            alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
+
+            alpha_values[i]= calculator_function("debye",approximated,tau_range)
+            if verbose:
+                print("das wird hier reingehauen",alpha_values[i])
         # integral sollte eigentlich fine sein schon weil die funktion ja schon richtig ausgewählt ist
      
 
@@ -249,8 +259,16 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 if __name__ == "__main__":
     print('executed in main formatter...')
 
+    #default
+    spectral_density="debye"
+    bose="compare"
+    integral="numerical"
     plot = "num_compare"
-
+    print(len(sys.argv))
+    if len(sys.argv)>=5:
+        spectral_density = sys.argv[2]
+        bose = sys.argv[3]
+        integral= sys.argv[4]
     if len(sys.argv)>2:
         plot = sys.argv[2]
         print(plot)
