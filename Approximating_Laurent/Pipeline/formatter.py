@@ -9,8 +9,7 @@ import sys
 #git_upload
 
 #commit: 
-# label is missing
-# deleted the old for loop
+
 
 
 
@@ -132,7 +131,8 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         for i in range(0,number_of_graphs):
             label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
              #TODO: color is managed in universal plot -> but also here -> left empty 
-
+    if bose=='compare':
+        label= [["closed",''],["approximated",'']]
 
     # We have 3 configurations:
     # spectral density 
