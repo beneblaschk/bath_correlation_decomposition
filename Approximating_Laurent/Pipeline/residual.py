@@ -38,12 +38,6 @@ def calculate_bath_tau_set(sd, approximated, tau_range):
     debye - ohmic - ultra_violet_cutoff
     approximated: True Laurent, False closed
     """
-
-    if sd=="debye":
-        #sd = debye_sd
-        print("debye")
-    else: 
-        return 
     t_values = numpy.arange(tau_range[0], tau_range[1],tau_range[2])
     return [bath(t,sd,approximated) for t in t_values] 
 

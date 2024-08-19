@@ -30,7 +30,7 @@ def format(compare,spectral_density,bose,integral):
     """
     tau_range = [0]*3 
     tau_range[0] = 0.0
-    tau_range[1] = 10    #es sollte eigenlich bis 2 gehen jetzt
+    tau_range[1] = 10   #es sollte eigenlich bis 2 gehen jetzt
     tau_range[2] = 0.5
 
     parameter_range = []
@@ -266,14 +266,13 @@ if __name__ == "__main__":
     bose="compare"
     integral="numerical"
     plot = "num_compare"
-    print(len(sys.argv))
+
     if len(sys.argv)>=5:
         spectral_density = sys.argv[2]
         bose = sys.argv[3]
         integral= sys.argv[4]
     if len(sys.argv)>2:
         plot = sys.argv[2]
-        print(plot)
     if plot=="num_compare":
         spectral_density = "compare" 
         bose = "closed" 
