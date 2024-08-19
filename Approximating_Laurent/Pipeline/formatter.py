@@ -10,6 +10,8 @@ import sys
 
 #commit: 
 # spectral density can now be also different !!
+# changed it to bath_tau_set
+
 sd = [0]*3
 sd[0] = "debye"
 sd[1] = "ohmic"
@@ -65,9 +67,8 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     config == 0 > no output
     config == 1 > limited parameter output
     """
+
     verbose = False
-
-
     if config<2:
         verbose = False
     else: 
@@ -77,6 +78,12 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     if config == 1: 
         print(f"tau: {tau_range[0]},{tau_range[1]},{tau_range[2]}") 
         print(f"gamma: {parameter_range[1][0]},{parameter_range[1][1]}, {parameter_range[1][2]}")
+
+
+    
+
+    # Bose should be closed for now
+    approximated = False
 
     calculate_alpha_values = [] 
     
@@ -162,9 +169,9 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
             label.append([f"{sd[0]}",''])
             label.append([f"{sd[1]}",''])
             label.append([f"{sd[2]}",''])        
-            calculate_alpha_values[0]=integrate_quad_cleaned.bath_closed_tau_set_sd_select
-            calculate_alpha_values[1]=integrate_quad_cleaned.bath_closed_tau_set_sd_select
-            calculate_alpha_values[2]=integrate_quad_cleaned.bath_closed_tau_set_sd_select
+            calculate_alpha_values[0]=integrate_quad_cleaned.bath_tau_set
+            calculate_alpha_values[1]=integrate_quad_cleaned.bath_tau_set
+            calculate_alpha_values[2]=integrate_quad_cleaned.bath_tau_set
             number_of_graphs =3
  
 
@@ -189,7 +196,7 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         # jetzt werden einfach zwei verschiedene funktionen verwendet um zu plotten 
         if spectral_density=="compare":
             #normaler case mit gamma variation
-            alpha_values[g] = calculate_alpha_values[0](sd[g],tau_range)
+            alpha_values[g] = calculate_alpha_values[0](sd[g],approximated,tau_range)
         else:    
             alpha_values[g] = calculate_alpha_values[0](1,g*gamma_steps+gamma_start,tau_range)
 
@@ -229,17 +236,22 @@ if __name__ == "__main__":
     print(plot)
     if plot=="num_compare":
         spectral_density = "compare" 
-        approximation = "closed" 
+        bose = "closed" 
         integral="numerical"
 
     if plot=="num_debye":
         spectral_density="debye"
-        approximation = "laurent" 
+        bose = "laurent" 
         integral="compare"
 
-    print(approximation)
-    print(f"format({spectral_density},{approximation},{integral})")
-    format(0,spectral_density,approximation,integral)
+    if plot=="bose_compare":
+        spectral_density="debye"
+        bose="compare"
+        integral="numerical"
+    
+    print(bose)
+    print(f"format({spectral_density},{bose},{integral})")
+    format(0,spectral_density,bose,integral)
 
 
         
