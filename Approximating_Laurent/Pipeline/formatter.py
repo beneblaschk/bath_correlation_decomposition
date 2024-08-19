@@ -9,7 +9,9 @@ import sys
 #git_upload
 
 #commit: 
-# ich glaub ich hab ausversehen die data_poitns und gaphs verwechselt
+# label is missing
+# deleted the old for loop
+
 
 
 sd = [0]*3
@@ -182,21 +184,21 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         print(f"resulting in {number_of_graphs} graphs")
 
     # now the calculator function is applied
-    calculate_alpha_values = [0]*number_of_graphs
+    alpha_values = [0]*number_of_graphs
     for i in range (0, number_of_graphs):
         if bose=="compare":
-            calculate_alpha_values[i]= calculator_function(sd,not (i%2==0),tau_range)    # ich will mit false anfangen (closed), modulo weil dann ist es einmal true und einmal false
+            alpha_values[i]= calculator_function(sd,not (i%2==0),tau_range)    # ich will mit false anfangen (closed), modulo weil dann ist es einmal true und einmal false
             continue
         if spectral_density=="compare":
-            calculate_alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
+            alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
         else:
-            calculate_alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
+            alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
         # integral sollte eigentlich fine sein schon weil die funktion ja schon richtig ausgewählt ist
      
 
     if verbose:
         print(f"calculator_function: {calculator_function}")
-        print(f"calculator an stelle{calculate_alpha_values}")
+        print(f"calculator an stelle{alpha_values}")
     
 
 
@@ -226,51 +228,19 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     #         number_of_graphs =3
  
 
-    #Hier werden die alpha Werte eingespeist
-    alpha_values = [0]*number_of_graphs
-    if verbose: 
-        print(alpha_values)
-
-
     # man könnte auch einfach die number_of_graphs literally nehmen und einfach dann nicht die gammas
     # variiern sondern wirklich die zwei veschiedenen graphen rein hauen
-
-
-    # ich überschreibe hier die daten wieder!
-    if verbose:
-        print(f"number of graphs {number_of_graphs}")
-    
-    for g in range (0,number_of_graphs):
-        if integral == 'compare':
-            alpha_values[g] = calculate_alpha_values[g](1,gamma_start,tau_range)
-
-        # jetzt werden einfach zwei verschiedene funktionen verwendet um zu plotten 
-        if spectral_density=="compare":
-            #normaler case mit gamma variation
-            alpha_values[g] = calculate_alpha_values[0](sd[g],approximated,tau_range)
-        else:    
-            alpha_values[g] = calculate_alpha_values[0](1,g*gamma_steps+gamma_start,tau_range)
-
-        
-
-
-        if verbose :
-            print(f"alpha_value[{g}] = {alpha_values[g]} len: {len(alpha_values[g])}")
-            #print(f"alpha_value[{g}][2] = {alpha_values[g][2]} for this gamma: {g*gamma_steps+gamma_start}")
     
   
 
 
-
-    if verbose: 
-        print("alpha_values")
-        print(alpha_values)
     #number_of_graphs =2  -> ich glaub das war nur für den anderen fall mit compare
     # Hier werden die alpha werte an das leeere Data_set angehängt, sodass zu jedem tau wert der richtige alphawert passt 
     for i in range(0,number_of_datapoints):
         for g in range(0,number_of_graphs):
             data_set[i].append(alpha_values[g][i])
-
+    if verbose:
+        print("data_set:",data_set)
     #show data
     universal_plot.show(data_set,label)
 
