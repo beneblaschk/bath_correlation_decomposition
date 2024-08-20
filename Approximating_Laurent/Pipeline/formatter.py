@@ -10,8 +10,7 @@ import residual
 #git_upload
 
 #commit: 
-# added a general ONE plot label with all the configs in it
-# added the ohmic alone
+# prepare for the ohmic numerical comparison
 
 
 
@@ -173,6 +172,8 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         if verbose:
             print('compare bose')
         # we only have two graphs to compare
+
+        calculator_function = integrate_quad_cleaned.bath_tau_set
 
     # Bose should be closed for now
     if bose=='closed':
