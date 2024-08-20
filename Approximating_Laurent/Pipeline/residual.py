@@ -2,6 +2,8 @@ import numpy
 import universal_plot
 #git_upload
 
+im = 1j
+
 gamma=1
 eta = 1
 n= 5 # for laurent approx
@@ -18,9 +20,23 @@ def residual_debye_laurent(t):
     k_values = numpy.arange(n+1)
     return numpy.exp(gamma*t)*eta*(0.5*gamma/2*numpy.sum(a * ((-1)**(k_values+1))*(gamma**(2*k_values)+1)))
 
+def residual_ohmic_closed(t):
+    k_values = numpy.arange(n+1)
+    return 4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp(4(2*numpy.pi*1j*k_values)/5 + (2*numpy.pi*k_values*t)))
+
+
 def bath(t,sd,approximated):
     #calcaltor = residual_laurent
     # currently we only have the debye 
+    if sd=="ohmic":
+        if approximated: 
+            print("not possible here")
+        else:
+            calcultor = residual_ohmic_closed
+ 
+        return calcultor(t)
+
+
     if approximated: 
         calcultor = residual_debye_laurent
     else:
