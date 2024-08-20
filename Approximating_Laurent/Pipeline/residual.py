@@ -22,7 +22,7 @@ def residual_debye_laurent(t):
 
 def residual_ohmic_closed(t):
     k_values = numpy.arange(n+1)
-    return 4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp(4(2*numpy.pi*1j*k_values)/5 + (2*numpy.pi*k_values*t)))
+    return 4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp(4*(2*numpy.pi*1j*k_values)/5 + (2*numpy.pi*k_values*t)))
 
 
 def bath(t,sd,approximated):

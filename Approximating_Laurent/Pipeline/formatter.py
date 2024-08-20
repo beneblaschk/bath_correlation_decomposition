@@ -10,7 +10,8 @@ import residual
 #git_upload
 
 #commit: 
-
+# added a general ONE plot label with all the configs in it
+# added the ohmic alone
 
 
 
@@ -133,10 +134,12 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
         # for i in range(0,number_of_graphs):
         #     label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
              #TODO: color is managed in universal plot -> but also here -> left empty 
+    label= [[f"{spectral_density} {bose} {integral}",'']]
     if bose=='compare':
         label= [["closed",''],["approximated",'']]
     if integral=="residual":
         label= [[f"{spectral_density} {bose} {integral}",'']]
+
 
     # We have 3 configurations:
     # spectral density 
@@ -161,6 +164,9 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     sd = spectral_density # mabye also the array
     if verbose:
         print('spectral density: debye spectral')
+    if sd=="ohmic":
+        calculator_function= residual.calculate_bath_tau_set
+        number_of_graphs=1
 
     if bose=="compare":
         number_of_graphs=2
@@ -197,6 +203,9 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     for i in range (0, number_of_graphs):
         if bose=="compare":
             alpha_values[i]= calculator_function(sd,not (i%2==0),tau_range)    # ich will mit false anfangen (closed), modulo weil dann ist es einmal true und einmal false
+            continue
+        if spectral_density=="ohmic":
+            alpha_values[i]= calculator_function(sd,approximated,tau_range)
             continue
         if spectral_density=="compare":
             alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
