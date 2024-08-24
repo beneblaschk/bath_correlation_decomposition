@@ -72,6 +72,22 @@ def bath_tau_set(sd,approximated,tau_range):
       t_values = numpy.arange(tau_range[0], tau_range[1],tau_range[2])
       return [bath(t,sd,approximated) for t in t_values]
 
+def integrate_function(x): 
+   return 1/(1+x**2)
+
+def integrate_quad_test():
+        for i in range(1,10):
+                a = i*1000
+                result = integrate.quad(integrate_function, a*lower_integral_limit, a*upper_integral_limit)
+                print("limits:",upper_integral_limit* a,"res: :",result) 
+        result = integrate.quad(integrate_function, -sc.inf, sc.inf)
+        print("infinify", "res: :",result)
+        print("pi compare      ", sc.pi)
 
 if __name__ == "__main__":
-     print("main")
+        for i in range(1,8):
+                x = numpy.arange(-10**i,10**i)
+                y1 = integrate_function(x)
+                I1 = integrate.simpson(y1, x=x)
+                print("limits: 10**",i,": ",(10**i),I1)
+
