@@ -75,19 +75,25 @@ def bath_tau_set(sd,approximated,tau_range):
 def integrate_function(x): 
    return 1/(1+x**2)
 
-def integrate_quad_test():
-        for i in range(1,10):
-                a = i*1000
+def integrate_quad_test(function, steps):
+        for i in range(1,steps):
+                a = 10**i
                 result = integrate.quad(integrate_function, a*lower_integral_limit, a*upper_integral_limit)
                 print("limits:",upper_integral_limit* a,"res: :",result) 
         result = integrate.quad(integrate_function, -sc.inf, sc.inf)
         print("infinify", "res: :",result)
         print("pi compare      ", sc.pi)
 
-if __name__ == "__main__":
-        for i in range(1,8):
+def integrate_sampling(function,steps):
+        '''
+        dont go further than 10**8 it will crash
+        '''
+        for i in range(1,steps):
                 x = numpy.arange(-10**i,10**i)
-                y1 = integrate_function(x)
+                y1 = function(x)
                 I1 = integrate.simpson(y1, x=x)
                 print("limits: 10**",i,": ",(10**i),I1)
 
+if __name__ == "__main__":
+      print('main')
+      integrate_quad_test(integrate_function,5)
