@@ -10,7 +10,7 @@ import residual
 #git_upload
 
 #commit: 
-
+ 
 
 sd = [0]*3
 sd[0] = "debye"
@@ -28,8 +28,8 @@ def format(compare,spectral_density,bose,integral):
     """
     tau_range = [0]*3 
     tau_range[0] = 0.0
-    tau_range[1] = 0.5   #es sollte eigenlich bis 2 gehen jetzt
-    tau_range[2] = 0.01
+    tau_range[1] = 10  
+    tau_range[2] = 0.5
 
     parameter_range = []
     parameter_range.append([])
@@ -98,61 +98,16 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     if verbose:
         print(f"empty data_set: \n {data_set}")
         print(f"resulting in {number_of_datapoints} number of datapoints")
-
-    eta = parameter_range[0][0]
-    gamma_start = parameter_range[1][0]
-    gamma_max= parameter_range[1][1]
-    gamma_steps = parameter_range[1][2]
     if verbose:
         print(f"gamma values: from {parameter_range[1][0]} to {parameter_range[1][1]} in {parameter_range[1][2]} steps")
 
-    # that is only when parameter compare haben!
-
-    #number_of_graphs = int((gamma_max-gamma_start)/gamma_steps)
-
-    # es wird wohl immer der letzte punkt rausgelassen, 
-    #TODO fix the boundaries
-
-
-
-    #werte nicht immer neu ausrechnen sondern einfach ablegen und falls vorhanden dann verwenden!
-
-    #TODO: import values
-
-    # Example usage
-    file_path = 'mathjax_array.txt'  # Replace with the path to your text file
-    #data = parser.parse_mathjax_array_from_file("Pipeline/mathjax_array.txt")
-
-
-    label = [] 
-    # nur label
-    #if integral=='residual':
-        #label= ["closed",'']
-        # for i in range(0,number_of_graphs):
-        #     label.append([f"{eta}_{float(i*gamma_steps+gamma_start)}",''])
-             #TODO: color is managed in universal plot -> but also here -> left empty 
-    label= [[f"{spectral_density} {bose} {integral}",'']]
-    if bose=='compare':
-        label= [["closed",''],["approximated",'']]
-    if integral=="residual":
-        label= [[f"{spectral_density} {bose} {integral}",'']]
-
 
     # We have 3 configurations:
-    # spectral density 
-    # bose
-    # integral 
+    # spectral density: debye, ohmic, ultraviolet
+    # bose: closed, laurent
+    # integral: residual - numerical 
 
-    #mabye also sd parameter compare
-
-    # each of them can be fixed, or compare to compare it
-
-    # spectral density-> einfach auf die jeweilige setzen dann 
-    # bose -> approximated or not
-    # integral -> selecting the right function 
-
-
-
+    # one is compare, the rest is fixed! 
 
     if spectral_density=="compare":
         print("not yet implemented")
@@ -173,16 +128,12 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 
         calculator_function = integrate_quad_cleaned.bath_tau_set
 
-    # Bose should be closed for now
     if bose=='closed':
         approximated = False
     else:
         approximated=True
 
     # actually i can also leave this as a text, dont need to interchange the whole time
-    if integral=="compare":
-        print("not yet implemented")
-        return
     if integral=="residual":
         calculator_function= residual.calculate_bath_tau_set
         number_of_graphs=1
@@ -212,59 +163,27 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 
             alpha_values[i]= calculator_function("debye",approximated,tau_range)
             if verbose:
-                print("das wird hier reingehauen",alpha_values[i])
-        # integral sollte eigentlich fine sein schon weil die funktion ja schon richtig ausgewählt ist
-     
+                print("das wird hier reingehauen",alpha_values[i])     
 
     if verbose:
         print(f"calculator_function: {calculator_function}")
         print(f"calculator an stelle{alpha_values}")
-    
 
-
-    # if integral=='compare':
-    # #also dieser bereich soll verglichen werden: 
-    #         label.append([f"numerical",''])
-    #         label.append([f"residual",''])
-
-
-
-    #         #parameter starts
-    #         parameter_range[0][0] = 1
-    #         parameter_range[1][0] = 1
-    #         number_of_graphs = 2
-    #         calculate_alpha_values = [0]*number_of_graphs
-    #         calculate_alpha_values[0]=integrate_quad_cleaned.bath_closed_tau_set
-    #         calculate_alpha_values[1]=deb_plot.plot_debye_advanced_parameter
-                   
-
-    # if spectral_density=="compare":
-    #         label.append([f"{sd[0]}",''])
-    #         label.append([f"{sd[1]}",''])
-    #         label.append([f"{sd[2]}",''])        
-    #         calculate_alpha_values[0]=integrate_quad_cleaned.bath_tau_set
-    #         calculate_alpha_values[1]=integrate_quad_cleaned.bath_tau_set
-    #         calculate_alpha_values[2]=integrate_quad_cleaned.bath_tau_set
-    #         number_of_graphs =3
- 
-
-    # man könnte auch einfach die number_of_graphs literally nehmen und einfach dann nicht die gammas
-    # variiern sondern wirklich die zwei veschiedenen graphen rein hauen
-    
-  
-
-
-    #number_of_graphs =2  -> ich glaub das war nur für den anderen fall mit compare
-    # Hier werden die alpha werte an das leeere Data_set angehängt, sodass zu jedem tau wert der richtige alphawert passt 
     for i in range(0,number_of_datapoints):
         for g in range(0,number_of_graphs):
             data_set[i].append(alpha_values[g][i])
     if verbose:
         print("data_set:",data_set)
-    #show data
-    universal_plot.show(data_set,label)
 
-    #converting in the right format: 
+    # labels 
+    label = [] 
+    label= [[f"{spectral_density} {bose} {integral}",'']]
+    if bose=='compare':
+        label= [["closed",''],["approximated",'']]
+    if integral=="residual":
+        label= [[f"{spectral_density} {bose} {integral}",'']]
+
+    universal_plot.show(data_set,label)
 
 if __name__ == "__main__":
     print('executed in main formatter...')

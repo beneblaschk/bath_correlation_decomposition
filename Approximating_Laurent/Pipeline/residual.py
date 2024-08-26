@@ -16,6 +16,12 @@ def residual_debye_closed(t):
     k_values = numpy.arange(n+1)
     return 4 * numpy.exp(2*t) - (numpy.sum( (2*numpy.pi*k_values)/(1-(2*numpy.pi*k_values)**2) *numpy.exp(2*numpy.pi * k_values* t)))
 
+
+def residual_debye_closed_simplified(t):
+    k_values = numpy.arange(n+1)
+    return 2 - numpy.sum(2*numpy.pi*k_values)/(1-(2*numpy.pi*k_values)**2)
+
+
 def residual_debye_laurent(t):
     k_values = numpy.arange(n+1)
     return numpy.exp(gamma*t)*eta*(0.5*gamma/2*numpy.sum(a * ((-1)**(k_values+1))*(gamma**(2*k_values)+1)))
@@ -23,6 +29,8 @@ def residual_debye_laurent(t):
 def residual_ohmic_closed(t):
     k_values = numpy.arange(n+1)
     return 4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp(4*(2*numpy.pi*1j*k_values)/5 + (2*numpy.pi*k_values*t)))
+
+
 
 
 def bath(t,sd,approximated):
@@ -35,7 +43,8 @@ def bath(t,sd,approximated):
             calcultor = residual_ohmic_closed
  
         return calcultor(t)
-
+    if sd=="debybe_simple":
+        calcultor = residual_debye_closed_simplified
 
     if approximated: 
         calcultor = residual_debye_laurent
