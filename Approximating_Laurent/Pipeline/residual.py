@@ -14,7 +14,10 @@ a = [0.08333333333333333, -0.0013888888888888874, 3.3068783068782915e-05, -8.267
 
 def residual_debye_closed(t):
     k_values = numpy.arange(K+1)
-    return 4 * numpy.exp(2*t) - (numpy.sum( (2*numpy.pi*k_values)/(1-(2*numpy.pi*k_values)**2) *numpy.exp(2*numpy.pi * k_values* t)))
+    #return 4 * numpy.exp(2*t) - (numpy.sum( (2*numpy.pi*k_values)/(1-(2*numpy.pi*k_values)**2) *numpy.exp(-2*numpy.pi * k_values* t)))
+    # new valuse
+    print('testo e')
+    return numpy.sum(1 / k_values) * numpy.exp(-2*numpy.pi * k_values*t)
 
 
 def residual_debye_closed_simplified(t):

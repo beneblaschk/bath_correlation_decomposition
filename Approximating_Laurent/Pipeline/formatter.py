@@ -122,16 +122,17 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     sd_array[1] = "ohmic"
     sd_array[2] = "ultra_violet_cutoff"
 
-    label = [['',''],['',''],['','']]
+    label = [['',''],['','']]
     if bose=='compare':
         label= [["closed",''],["approximated",'']]
     if integral=="residual":
         label= [[f"{spectral_density} {bose} {integral}",'']]
 
     if spectral_density=="compare":
+        label = [['',''],['',''],['','']]
         number_of_graphs =3
         print("number of graphs: 3 ")
-        for i in range(1,number_of_graphs):
+        for i in range(0,number_of_graphs):
             label[i] = [f"{sd_array[i]} {bose} {integral}",'']
     
     if bose=="compare": 
@@ -145,9 +146,10 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     if integral=="compare":
         number_of_graphs = 2
         print("number of graphs: 2 ")
-        for i in range(1,number_of_graphs):
+        for i in range(0,number_of_graphs):
             label[0] = [f"{spectral_density} {bose} numerical",'']
             label[1] = [f"{spectral_density} {bose} residual",'']
+            print(i)
             break
     # here the number of graphs is cleared!
 
