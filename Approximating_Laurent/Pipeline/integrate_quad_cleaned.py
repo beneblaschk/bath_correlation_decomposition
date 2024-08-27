@@ -13,7 +13,7 @@ import sympy
 
 x, y = sympy.symbols('x y')
 #for the integral
-lower_integral_limit = -100
+lower_integral_limit = -200
 upper_integral_limit = - lower_integral_limit
 distance_to_signularity = 0.01 
 bath_front_faktor = 1/(numpy.pi)
@@ -48,11 +48,22 @@ def bath_integralfunction(w,t,sd,approximated):
                 return sd(w) * (bose_approxed(w)-1) * numpy.exp((- (0+1j)*w*t))
         return "Error"
 
+
+def debye_simple_function(x): 
+      return debye_sd(x)*bose_closed(x)
+
 def bath(t, sd, approximated): 
         result_1 = integrate.quad(bath_integralfunction, lower_integral_limit, 0-distance_to_signularity,args=(t,sd,approximated))
         result_2 = integrate.quad(bath_integralfunction, 0+distance_to_signularity, upper_integral_limit,args=(t,sd,approximated))
         #i think i only need to integrate from 0 right??
         # i need to check wether the arguments are correctly transmitted
+        
+        return bath_front_faktor *(result_1[0]+result_2[0])
+
+
+def bath_simple(t): 
+        result_1 = integrate.quad(debye_simple_function, lower_integral_limit, 0-distance_to_signularity)
+        result_2 = integrate.quad(debye_simple_function, 0+distance_to_signularity, upper_integral_limit)
         
         return bath_front_faktor *(result_1[0]+result_2[0])
 
@@ -72,15 +83,18 @@ def bath_tau_set(sd,approximated,tau_range):
       t_values = numpy.arange(tau_range[0], tau_range[1],tau_range[2])
       return [bath(t,sd,approximated) for t in t_values]
 
+def debye_simple_function(x): 
+      return debye_sd(x)*bose_closed(x)
+
 def integrate_function(x): 
    return 1/(1+x**2)
 
 def integrate_quad_test(function, steps):
         for i in range(1,steps):
-                a = 10**i
-                result = integrate.quad(integrate_function, a*lower_integral_limit, a*upper_integral_limit)
+                a = i
+                result = integrate.quad(function, a*lower_integral_limit, a*upper_integral_limit)
                 print("limits:",upper_integral_limit* a,"res: :",result) 
-        result = integrate.quad(integrate_function, -sc.inf, sc.inf)
+        result = integrate.quad(function, -sc.inf, sc.inf)
         print("infinify", "res: :",result)
         print("pi compare      ", sc.pi)
 
@@ -96,4 +110,6 @@ def integrate_sampling(function,steps):
 
 if __name__ == "__main__":
       print('main')
-      integrate_quad_test(integrate_function,5)
+      #integrate_quad_test(integrate_function,5)
+
+      print(bath_simple(1))
