@@ -12,10 +12,10 @@ import residual
 #commit: 
  
 
-sd = [0]*3
-sd[0] = "debye"
-sd[1] = "ohmic"
-sd[2] = "ultra_violet_cutoff"
+sd_array = [0]*3
+sd_array[0] = "debye"
+sd_array[1] = "ohmic"
+sd_array[2] = "ultra_violet_cutoff"
 
 
 def format(compare,spectral_density,bose,integral):
@@ -103,67 +103,97 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
 
 
     # We have 3 configurations:
-    # spectral density: debye, ohmic, ultraviolet
+    # spectral density: debye, ohmic, ultraviolet 
     # bose: closed, laurent
     # integral: residual - numerical 
 
+    # compare: 
+    # spectral density: 3 number of graphs! 
+    # bose: closed, laurent: 2 number of graphs! 
+    # integral: residual - numerical: 2 number of graphs! 
+
     # one is compare, the rest is fixed! 
 
+
+    # labels 
+    number_of_graphs=3
+    sd_array = [0]*3
+    sd_array[0] = "debye"
+    sd_array[1] = "ohmic"
+    sd_array[2] = "ultra_violet_cutoff"
+
+    label = [['',''],['',''],['','']]
+    if bose=='compare':
+        label= [["closed",''],["approximated",'']]
+    if integral=="residual":
+        label= [[f"{spectral_density} {bose} {integral}",'']]
+
     if spectral_density=="compare":
-        print("not yet implemented")
-        return
-    #therefore is a spectral_density now fixed
+        number_of_graphs =3
+        print("number of graphs: 3 ")
+        for i in range(1,number_of_graphs):
+            label[i] = [f"{sd_array[i]} {bose} {integral}",'']
+    
+    if bose=="compare": 
+        number_of_graphs = 2
+        print("number of graphs: 2 ")
+        for i in range(1,number_of_graphs):
+            label[0] = [f"{spectral_density} closed {integral}",'']
+            label[1] = [f"{spectral_density} laurent {integral}",'']
+            break
+    
+    if integral=="compare":
+        number_of_graphs = 2
+        print("number of graphs: 2 ")
+        for i in range(1,number_of_graphs):
+            label[0] = [f"{spectral_density} {bose} numerical",'']
+            label[1] = [f"{spectral_density} {bose} residual",'']
+            break
+    # here the number of graphs is cleared!
+
     sd = spectral_density # mabye also the array
-    if verbose:
-        print('spectral density: debye spectral')
-    if sd=="ohmic":
-        calculator_function= residual.calculate_bath_tau_set
-        number_of_graphs=1
-
-    if bose=="compare":
-        number_of_graphs=2
-        if verbose:
-            print('compare bose')
-        # we only have two graphs to compare
-
-        calculator_function = integrate_quad_cleaned.bath_tau_set
+    # the spectral density will be given in the big loop
 
     if bose=='closed':
         approximated = False
     else:
         approximated=True
 
-    # actually i can also leave this as a text, dont need to interchange the whole time
     if integral=="residual":
         calculator_function= residual.calculate_bath_tau_set
-        number_of_graphs=1
-        #rn only one plot
-        #rn gamma, eta = 1
 
     if integral=="numerical":
-        if verbose:
-            print("adding integratie quad to calculator_function")
         calculator_function= integrate_quad_cleaned.bath_tau_set
     
+
+
+
+
     if verbose:
         print(f"resulting in {number_of_graphs} graphs")
 
     # now the calculator function is applied
     alpha_values = [0]*number_of_graphs
-    for i in range (0, number_of_graphs):
-        if bose=="compare":
-            alpha_values[i]= calculator_function(sd,not (i%2==0),tau_range)    # ich will mit false anfangen (closed), modulo weil dann ist es einmal true und einmal false
-            continue
-        if spectral_density=="ohmic":
-            alpha_values[i]= calculator_function(sd,approximated,tau_range)
-            continue
-        if spectral_density=="compare":
-            alpha_values[i]= calculator_function(sd[i],approximated,tau_range)
-        else:
 
-            alpha_values[i]= calculator_function("debye",approximated,tau_range)
-            if verbose:
-                print("das wird hier reingehauen",alpha_values[i])     
+    # here is the main allocation !
+    for i in range (0, number_of_graphs):
+        # first we check for the spectral density compare! 
+        if spectral_density=="compare":
+            # here we are also iterating over the spectral density array 
+            alpha_values[i]= calculator_function(sd_array[i],approximated,tau_range)
+            continue
+        if bose=="compare":
+            alpha_values[i]= calculator_function(sd,not (i%2==0),tau_range)  
+            continue
+        # now only the intgral compare is left! 
+
+        if integral=="compare":
+            alpha_values[0] = integrate_quad_cleaned.bath_tau_set(sd,approximated, tau_range)
+            alpha_values[1] = residual.calculate_bath_tau_set(sd, approximated, tau_range)
+            break
+            # we only need the two rounds
+            #here we concatinate the two list actually 
+  
 
     if verbose:
         print(f"calculator_function: {calculator_function}")
@@ -175,13 +205,7 @@ def format_advanced_parameter(compare, spectral_density, bose, integral, tau_ran
     if verbose:
         print("data_set:",data_set)
 
-    # labels 
-    label = [] 
-    label= [[f"{spectral_density} {bose} {integral}",'']]
-    if bose=='compare':
-        label= [["closed",''],["approximated",'']]
-    if integral=="residual":
-        label= [[f"{spectral_density} {bose} {integral}",'']]
+
 
     universal_plot.show(data_set,label)
 

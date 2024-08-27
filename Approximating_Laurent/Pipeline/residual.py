@@ -61,7 +61,6 @@ def bath(t,sd,approximated):
         print('singu2')
         calcultor = residual_singualartiy_check2
     if sd=="debye":
-        print("selected debye")
         if approximated: 
             calcultor = residual_debye_laurent
         else:
