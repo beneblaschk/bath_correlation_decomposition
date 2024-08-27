@@ -13,9 +13,9 @@ import sympy
 
 x, y = sympy.symbols('x y')
 #for the integral
-lower_integral_limit = -200
+lower_integral_limit = -400
 upper_integral_limit = - lower_integral_limit
-distance_to_signularity = 0.01 
+distance_to_signularity = 0.0001
 bath_front_faktor = 1/(numpy.pi)
 #bath_front_faktor = 1
 
@@ -67,6 +67,14 @@ def bath_simple(t):
         
         return bath_front_faktor *(result_1[0]+result_2[0])
 
+def bath_checking_singularities(t): 
+        result_1 = integrate.quad(checking_singularites2, lower_integral_limit, 0-distance_to_signularity)
+        result_2 = integrate.quad(checking_singularites2, 0+distance_to_signularity, upper_integral_limit)
+        
+        return bath_front_faktor *(result_1[0]+result_2[0])
+
+
+
 def bath_tau_set(sd,approximated,tau_range):
       """
       numerical approximated bath 
@@ -86,8 +94,16 @@ def bath_tau_set(sd,approximated,tau_range):
 def debye_simple_function(x): 
       return debye_sd(x)*bose_closed(x)
 
+def checking_singularites (x) :
+      return 1/(1-numpy.exp(x)) * 1 / (1+x**2)
+def checking_singularites2 (x) :
+      return 1/(1-numpy.exp(x)) * 1 / (1+x**2)*numpy.exp(-(1j)*x)
+
 def integrate_function(x): 
    return 1/(1+x**2)
+
+
+
 
 def integrate_quad_test(function, steps):
         for i in range(1,steps):
@@ -112,4 +128,4 @@ if __name__ == "__main__":
       print('main')
       #integrate_quad_test(integrate_function,5)
 
-      print(bath_simple(1))
+      print(bath_checking_singularities(1))

@@ -7,7 +7,7 @@ im = 1j
 gamma=1
 eta = 1
 n= 5 # for laurent approx
-K= 5 # for Matsubara terms (imaginary poles are periodically)
+K= 2 # for Matsubara terms (imaginary poles are periodically)
 
 #pre calculated values of the laurent approx
 a = [0.08333333333333333, -0.0013888888888888874, 3.3068783068782915e-05, -8.267195767195603e-07, 2.0876756987866386e-08,-5.284190138685735e-10]#, 1.3382536530666791e-11, -3.3896802963044296e-13, 8.586062056093802e-15, -2.1748686983715528e-16, 5.509002826470406e-18, 0, 0, 0, 0]
@@ -30,7 +30,16 @@ def residual_ohmic_closed(t):
     k_values = numpy.arange(K+1)
     return 4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp(4*(2*numpy.pi*1j*k_values)/5 + (2*numpy.pi*k_values*t)))
 
+def residual_singualarity_check(t): 
+    k_values = numpy.arange(1,K+1)
+    print('singu')
+    return numpy.sum(1/(k_values)**3 * numpy.exp(1)**(-2*numpy.pi * k_values))
 
+
+def residual_singualartiy_check2(t):
+    k_values = numpy.arange(1,K+1)
+    print('singu2')
+    return numpy.sum(1/(k_values) * numpy.exp(-2*numpy.pi * k_values))
 
 
 def bath(t,sd,approximated):
@@ -45,15 +54,18 @@ def bath(t,sd,approximated):
         return calcultor(t)
     if sd=="debybe_simple":
         calcultor = residual_debye_closed_simplified
+    if sd=="singularity_check":
+        print('singu1')
+        calcultor = residual_singualarity_check
+    if sd=="singularity_check2":
+        print('singu2')
+        calcultor = residual_singualartiy_check2
     if sd=="debye":
         print("selected debye")
-    else: 
-        return 
-
-    if approximated: 
-        calcultor = residual_debye_laurent
-    else:
-        calcultor = residual_debye_closed
+        if approximated: 
+            calcultor = residual_debye_laurent
+        else:
+            calcultor = residual_debye_closed
 
     
     return calcultor(t)
@@ -75,4 +87,4 @@ if __name__ == "__main__":
      #print(bath(1,"debye",False))
     #print(bath(1,"debye_simple",False))
      #    print(calculate_bath_tau_set("debye",False,[0,1,0.5]))
-    print(bath(1,"debye",False))
+    print(bath(1,"singularity_check2",False))
