@@ -24,14 +24,16 @@ start_table_string ="\\begin{array}{|c|c|}\\hline\\tau & \\alpha\\\\"
 end_table_string = "\\hline\\end{array}"
 
 
-def debye_sd (x) : 
-      return x/(x**2+1)
+def debye_sd (w) : 
+      return 0.5 * (0.25*w)/(w**2+0.25**2)
 
 def ohmic_sd (x) : 
-      return numpy.pi*x*numpy.exp(-x/5)
+      #return numpy.pi*x*numpy.exp(-x/5)
+      return 0
 
 def ultra_violet_cutoff_sd (x) :
-      return pow(numpy.exp(1),2) *x *(2 - x)
+      #return numpy.exp(2) *x *(0.6 - x)
+      return 0
 
 # bath function with closed bose 
 def bose_closed(x): 
