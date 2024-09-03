@@ -6,7 +6,7 @@ import numpy as np
 
 #commit: 
 
-
+# chat.gpt 
 cmap = plt.get_cmap('viridis')
 
 
@@ -14,7 +14,7 @@ def show(data, label):
 
     for i in range(0,len(label)):
         label[i][1] = cmap(i/len(label))
-
+        #chat.gpt code
 
     show_color(data, label,True)
 
