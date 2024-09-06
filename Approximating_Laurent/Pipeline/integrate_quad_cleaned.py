@@ -127,7 +127,6 @@ def integrate_sampling(function,steps):
                 print("limits: 10**",i,": ",(10**i),I1)
 
 if __name__ == "__main__":
-      print('main')
+      #print('main')
       #integrate_quad_test(integrate_function,5)
-
-      print(bath_checking_singularities(1))
+        print("debye_closed_numerics="+bath_tau_set("debye", False, [0,30.1,1]))
