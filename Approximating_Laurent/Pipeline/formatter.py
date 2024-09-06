@@ -28,8 +28,8 @@ def format(compare,spectral_density,bose,integral):
     """
     tau_range = [0]*3 
     tau_range[0] = 0.0
-    tau_range[1] = 10  
-    tau_range[2] = 0.5
+    tau_range[1] = 30 
+    tau_range[2] = 1
 
     parameter_range = []
     parameter_range.append([])

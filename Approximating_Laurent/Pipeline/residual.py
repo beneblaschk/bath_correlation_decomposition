@@ -31,7 +31,7 @@ def residual_debye_laurent(t):
 
 def residual_ohmic_closed(t):
     k_values = numpy.arange(K+1)
-    return 4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp(4*(2*numpy.pi*1j*k_values)/5 + (2*numpy.pi*k_values*t)))
+    return -4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp((-2*numpy.pi*k_values*t) - 1j *(2*numpy.pi*k_values)/0.4))
 
 def residual_singualarity_check(t): 
     k_values = numpy.arange(1,K+1)
