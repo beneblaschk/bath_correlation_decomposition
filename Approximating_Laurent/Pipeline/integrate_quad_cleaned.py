@@ -13,9 +13,9 @@ import sympy
 
 x, y = sympy.symbols('x y')
 #for the integral
-lower_integral_limit = -400
+lower_integral_limit = -100
 upper_integral_limit = - lower_integral_limit
-distance_to_signularity = 0.0001
+distance_to_signularity = 0.01
 bath_front_faktor = 1/(numpy.pi)
 #bath_front_faktor = 1
 
@@ -129,4 +129,6 @@ def integrate_sampling(function,steps):
 if __name__ == "__main__":
       #print('main')
       #integrate_quad_test(integrate_function,5)
-        print("debye_closed_numerics="+bath_tau_set("debye", False, [0,30.1,1]))
+        print("debye_closed_numerics",end="=")
+
+        print(bath_tau_set("debye", False, [0,30.1,1]))

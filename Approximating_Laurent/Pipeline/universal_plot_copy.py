@@ -44,7 +44,6 @@ def show(data, labels):
 if __name__ == "__main__":
     print('main')
 
-    print(ds.tau_values)
     data = [0]
     label = [""]
     data[0] = ds.debye_closed_numerics
