@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import Parser_table_to_list as parser
 import Plotting_debye as deb_plot
 import numpy as np
+import os
 #git_upload
 
 #commit: 
@@ -53,7 +54,7 @@ def show_color(data, label,verbose):
         print("alpha_values")
         print(alpha_values)
     # Create a plot
-    plt.figure(figsize=(14, 9))
+    plt.figure(figsize=(8, 5))
     #iterating overall values 
     for i in range(0, dimension-1):
         if verbose:
@@ -73,9 +74,20 @@ def show_color(data, label,verbose):
     plt.grid(True)
     plt.legend()
 
-    # Show the plot
-    plt.show()
 
+    file_name= str(label[0][0]).replace(" ", "_")+".pdf"
+    print(file_name)
+    folder_path = "/home/benne/Documents/Uni/ba/bath/plots/"
+    file_path = folder_path+file_name
+
+
+    if not os.path.exists(file_path):
+        plt.savefig(file_path, format='pdf')
+        print(file_path+' saved')
+        #only show when not existing! 
+    
+    # only show when no path
+    plt.show()
 if __name__ == "__main__":
     print('main')
 
