@@ -6,6 +6,7 @@ im = 1j
 
 gamma=0.25
 eta = 0.5
+Omega = 0.4
 n= 5 # for laurent approx
 K= 5 # for Matsubara terms (imaginary poles are periodically)
 
@@ -32,7 +33,7 @@ def residual_debye_laurent(t):
 
 def residual_ohmic_closed(t):
     k_values = numpy.arange(K+1)
-    return -4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp((-2*numpy.pi*k_values*t) - 1j *(2*numpy.pi*k_values)/0.4))
+    return -4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp((-2*numpy.pi*k_values*t) - 1j *(2*numpy.pi*k_values)/Omega))
 
 def residual_singualarity_check(t): 
     k_values = numpy.arange(1,K+1)
@@ -83,8 +84,8 @@ def calculate_bath_tau_set(sd, approximated, tau_range):
     approximated: True Laurent, False closed
     """
     t_values = numpy.arange(tau_range[0], tau_range[1],tau_range[2])
-    return [bath(t,sd,approximated) for t in t_values] 
+    return [bath(t,sd,approximated).real for t in t_values] 
 
 if __name__ == "__main__":
-    print("main")
-    print(calculate_bath_tau_set("debye", False, [0,30.1,1]))
+    print("ohmic_closed_residual",end="=")
+    print(calculate_bath_tau_set("ohmic", False, [0,30.1,1]))

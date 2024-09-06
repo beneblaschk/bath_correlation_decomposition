@@ -18,7 +18,7 @@ upper_integral_limit = - lower_integral_limit
 distance_to_signularity = 0.01
 bath_front_faktor = 1/(numpy.pi)
 #bath_front_faktor = 1
-
+Omega = 0.4
 
 start_table_string ="\\begin{array}{|c|c|}\\hline\\tau & \\alpha\\\\"
 end_table_string = "\\hline\\end{array}"
@@ -28,8 +28,7 @@ def debye_sd (w) :
       return 0.5 * (0.25*w)/(w**2+0.25**2)
 
 def ohmic_sd (x) : 
-      #return numpy.pi*x*numpy.exp(-x/5)
-      return 0
+      return numpy.pi*x*numpy.exp(-abs(x/Omega))
 
 def ultra_violet_cutoff_sd (x) :
       #return numpy.exp(2) *x *(0.6 - x)
@@ -45,9 +44,9 @@ def bose_approxed(x):
 
 def bath_integralfunction(w,t,sd,approximated):
         if not approximated:
-                return sd(w) * (bose_closed(w)-1) * numpy.exp((- (0+1j)*w*t))
+                return sd(w) * (bose_closed(w)) * numpy.exp(( (0+1j)*w*t))
         if approximated:
-                return sd(w) * (bose_approxed(w)-1) * numpy.exp((- (0+1j)*w*t))
+                return sd(w) * (bose_approxed(w)) * numpy.exp(( (0+1j)*w*t))
         return "Error"
 
 
@@ -129,6 +128,6 @@ def integrate_sampling(function,steps):
 if __name__ == "__main__":
       #print('main')
       #integrate_quad_test(integrate_function,5)
-        print("debye_closed_numerics",end="=")
+        print("ohmic_laurent_numerics",end="=")
 
-        print(bath_tau_set("debye", False, [0,30.1,1]))
+        print(bath_tau_set("ohmic", True, [0,30.1,1]))

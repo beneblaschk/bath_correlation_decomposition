@@ -33,6 +33,8 @@ def show(data, labels):
 
 
     file_name= str(label[0]).replace(" ", "_")+".pdf"
+    file_name= "compare_laurent_numerics_t=30.pdf"
+
     print(file_name)
     folder_path = "/home/benne/Documents/Uni/ba/bath/plots/"
     file_path = folder_path+file_name
@@ -44,10 +46,14 @@ def show(data, labels):
 if __name__ == "__main__":
     print('main')
 
-    data = [0]
-    label = [""]
-    data[0] = ds.debye_closed_numerics
+    data = [0,0]
+    label = ["",""]
+    data[0] = ds.debye_laurent_numerics
+    data[1] = ds.ohmic_laurent_numerics
+
     print(data[0])
     print(len(data[0]))
-    label[0] = "debye_closed_numerics"
+    label[0] = "debye_laurent_numerics_a=-100_b=100_e=0.01_N=2"
+    label[1] = "ohmic_laurent_numerics_a=-100_b=100_e=0.01_N=2"
+    #label[2] = "ohmic_laurent_numerics_a=-100_b=100_e=0.01_N=2"
     show(data,label)
