@@ -4,7 +4,7 @@ import universal_plot
 
 im = 1j
 
-T = 0.02
+T = 1
 
 gamma=0.25
 eta = 0.5
@@ -100,4 +100,5 @@ def calculate_bath_tau_set(sd, approximated, tau_range):
 
 if __name__ == "__main__":
     print("debye_closed_residuals",end="=")
+    #print(residual_debye_closed_first_term(0))
     print(calculate_bath_tau_set("debye_first_term", False, [0,30.1,1]))
