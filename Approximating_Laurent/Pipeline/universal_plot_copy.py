@@ -31,7 +31,7 @@ def show(data, labels):
     plt.title(r'Plot of $\alpha$ vs $\tau$')
     plt.grid(True)
     plt.legend()
-    plt.yscale('log')
+    #plt.yscale('log')
 
     file_name= str(label[0]).replace(" ", "_")+".pdf"
     file_name= f"{str(len(sys.argv)-1)}_{str(sys.argv[1])}.pdf"
@@ -176,6 +176,22 @@ if __name__ == "__main__":
                 data[i] = ds.debye_closed_numerics_T_002
             case "debye_closed_residuals_T_002":
                 data[i] = ds.debye_closed_residuals_T_002
+            case "debye_closed_residuals_mod_1":
+                data[i] = ds.debye_closed_residuals_mod_1
+            case "debye_closed_residuals_mod_2":
+                data[i] = ds.debye_closed_residuals_mod_2
+            case "deb_res_k=1":
+                data[i] = ds.debye_closed_residuals_mod_5_k_1
+            case "deb_res_k=2":
+                data[i] = ds.debye_closed_residuals_mod_5_k_2
+            case "deb_res_k=3":
+                data[i] = ds.debye_closed_residuals_mod_5_k_3
+            case "deb_res_k=4":
+                data[i] = ds.debye_closed_residuals_mod_5_k_4
+            case "deb_res_k=5":
+                data[i] = ds.debye_closed_residuals_mod_5_k_5
+
+                                                         
             case _:
                 print("error")
                 exit

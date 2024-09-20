@@ -12,6 +12,8 @@ Omega = 0.4
 n= 5 # for laurent approx
 K= 5 # for Matsubara terms (imaginary poles are periodically)
 
+exp_v = numpy.exp(-1j*0.25)
+
 #pre calculated values of the laurent approx
 a = [0.08333333333333333, -0.0013888888888888874, 3.3068783068782915e-05, -8.267195767195603e-07, 2.0876756987866386e-08,-5.284190138685735e-10]#, 1.3382536530666791e-11, -3.3896802963044296e-13, 8.586062056093802e-15, -2.1748686983715528e-16, 5.509002826470406e-18, 0, 0, 0, 0]
 
@@ -21,11 +23,40 @@ def residual_debye_closed(t):
     # new valuse
     #return numpy.sum(1 / k_values) * numpy.exp(-2*numpy.pi * k_values*t)
     return numpy.sum(eta * (4 * numpy.pi*k_values* gamma)/(4 * numpy.pi**2* k_values**2+gamma**2) * numpy.exp(-2*numpy.pi* k_values*t))
-        
+
+
+#all terms:
 def residual_debye_closed_first_term(t):
 
     k_values = numpy.arange(K+1)
     return 1j* eta* gamma* (1/(1-numpy.exp(-(1j*gamma)/T)))*numpy.exp(-gamma*t)+numpy.sum(eta * (4 * numpy.pi*k_values* gamma)/(4 * numpy.pi**2* k_values**2+gamma**2) * numpy.exp(-2*numpy.pi* k_values*t))       
+
+# only first term
+def residual_debye_closed_mod_1(t):
+    return 1j* eta* gamma* (1/(1-exp_v))*numpy.exp(-gamma*t)
+
+#with cosinus and sinus 
+def residual_debye_closed_mod_2(t):
+    return 1j* eta*gamma * (1/(1-(numpy.cos(gamma)-1j*numpy.sin(gamma))))* numpy.exp(-gamma*t)
+
+#only cosinus -> didnt work -> 
+def residual_debye_closed_mod_3(t):
+    return eta*gamma * numpy.exp(-gamma*t)* (1/ (1j*(numpy.cos(gamma)-1)+numpy.sin(gamma)))
+
+# approximated with approximatly 4 for the real part! 
+def residual_debye_closed_mod_4(t):
+    return eta*gamma*4*numpy.exp(-gamma*t)
+
+# only the k-th term
+def residual_debye_closed_mod_5(t):
+
+    # k starting from 1 -> inftly can be selected here 
+    k=5
+    
+    return eta * (4 * numpy.pi*k* gamma)/(4 * numpy.pi**2* k**2+gamma**2) * numpy.exp(-2*numpy.pi* k*t)      
+
+
+
 
 def residuals_bose_first_term (t):
     # test
@@ -38,7 +69,9 @@ def residual_debye_closed_simplified(t):
 
 def residual_debye_laurent(t):
     k_values = numpy.arange(n+1)
-    return numpy.exp(gamma*t)*eta*(0.5*gamma/2*numpy.sum(a * ((-1)**(k_values+1))*(gamma**(2*k_values)+1)))
+    return eta/2 * numpy.exp(-gamma*t)
+
+    #return numpy.exp(gamma*t)*eta*(0.5*gamma/2*numpy.sum(a * ((-1)**(k_values+1))*(gamma**(2*k_values)+1)))
 
 def residual_ohmic_closed(t):
     k_values = numpy.arange(K+1)
@@ -70,13 +103,23 @@ def bath(t,sd,approximated):
         calculator = residual_debye_closed_simplified
     if sd=="singularity_check":
         print('singu1')
-        calculator = residual_singualarity_check
+    if sd=="debye_laurent":
+        calculator = residual_debye_laurent
     if sd=="singularity_check2":
         print('singu2')
         calculator = residual_singualartiy_check2
     if sd=="debye_first_term":
         calculator = residual_debye_closed_first_term
-
+    if sd=="debye_mod_1":
+        calculator = residual_debye_closed_mod_1
+    if sd=="debye_mod_2":
+        calculator = residual_debye_closed_mod_2
+    if sd=="debye_mod_3":
+        calculator = residual_debye_closed_mod_3
+    if sd=="debye_mod_4":
+        calculator = residual_debye_closed_mod_4
+    if sd=="debye_mod_5":
+        calculator = residual_debye_closed_mod_5
     if sd=="debye":
         if approximated: 
             calculator = residual_debye_laurent
@@ -99,6 +142,6 @@ def calculate_bath_tau_set(sd, approximated, tau_range):
     return [bath(t,sd,approximated).real for t in t_values] 
 
 if __name__ == "__main__":
-    print("debye_closed_residuals",end="=")
+    print("debye_laurent_residual",end="=")
     #print(residual_debye_closed_first_term(0))
-    print(calculate_bath_tau_set("debye_first_term", False, [0,30.1,1]))
+    print(calculate_bath_tau_set("debye_laurent", False, [0,30.1,1]))
