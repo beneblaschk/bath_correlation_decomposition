@@ -4,6 +4,8 @@ import universal_plot
 
 im = 1j
 
+T = 0.02
+
 gamma=0.25
 eta = 0.5
 Omega = 0.4
@@ -20,8 +22,15 @@ def residual_debye_closed(t):
     #return numpy.sum(1 / k_values) * numpy.exp(-2*numpy.pi * k_values*t)
     return numpy.sum(eta * (4 * numpy.pi*k_values* gamma)/(4 * numpy.pi**2* k_values**2+gamma**2) * numpy.exp(-2*numpy.pi* k_values*t))
         
-        
-        
+def residual_debye_closed_first_term(t):
+
+    k_values = numpy.arange(K+1)
+    return 1j* eta* gamma* (1/(1-numpy.exp(-(1j*gamma)/T)))*numpy.exp(-gamma*t)+numpy.sum(eta * (4 * numpy.pi*k_values* gamma)/(4 * numpy.pi**2* k_values**2+gamma**2) * numpy.exp(-2*numpy.pi* k_values*t))       
+
+def residuals_bose_first_term (t):
+    # test
+    return 1/8 * 1/numpy.sin(gamma) * numpy.exp(-gamma*t) 
+
 def residual_debye_closed_simplified(t):
     k_values = numpy.arange(K+1)
     return 2 - numpy.sum(2*numpy.pi*k_values)/(1-(2*numpy.pi*k_values)**2)
@@ -54,25 +63,28 @@ def bath(t,sd,approximated):
         if approximated: 
             print("not possible here")
         else:
-            calcultor = residual_ohmic_closed
+            calculator = residual_ohmic_closed
  
-        return calcultor(t)
+        return calculator(t)
     if sd=="debybe_simple":
-        calcultor = residual_debye_closed_simplified
+        calculator = residual_debye_closed_simplified
     if sd=="singularity_check":
         print('singu1')
-        calcultor = residual_singualarity_check
+        calculator = residual_singualarity_check
     if sd=="singularity_check2":
         print('singu2')
-        calcultor = residual_singualartiy_check2
+        calculator = residual_singualartiy_check2
+    if sd=="debye_first_term":
+        calculator = residual_debye_closed_first_term
+
     if sd=="debye":
         if approximated: 
-            calcultor = residual_debye_laurent
+            calculator = residual_debye_laurent
         else:
-            calcultor = residual_debye_closed
+            calculator = residual_debye_closed
 
     
-    return calcultor(t)
+    return calculator(t)
 
 
 
@@ -87,5 +99,5 @@ def calculate_bath_tau_set(sd, approximated, tau_range):
     return [bath(t,sd,approximated).real for t in t_values] 
 
 if __name__ == "__main__":
-    print("ohmic_closed_residual",end="=")
-    print(calculate_bath_tau_set("ohmic", False, [0,30.1,1]))
+    print("debye_closed_residuals",end="=")
+    print(calculate_bath_tau_set("debye_first_term", False, [0,30.1,1]))
