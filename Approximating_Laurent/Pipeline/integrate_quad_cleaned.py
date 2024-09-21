@@ -13,9 +13,10 @@ import sympy
 
 x, y = sympy.symbols('x y')
 #for the integral
-lower_integral_limit = -100
+lower_integral_limit = -16
 upper_integral_limit = - lower_integral_limit
 distance_to_signularity = 0.01
+# 0.1 -> 0.05 -> 0.01 -> 0.005 -> 0.001 -> 0.0005 -> 0.0001
 bath_front_faktor = 1/(numpy.pi)
 #bath_front_faktor = 1
 Omega = 0.4
@@ -61,6 +62,13 @@ def bath(t, sd, approximated):
         
         return bath_front_faktor *(result_1[0]+result_2[0])
 
+def bath_imag(t, sd, approximated): 
+        result_1 = integrate.quad(bath_integralfunction, lower_integral_limit, 0-distance_to_signularity,args=(t,sd,approximated),complex_func=True)
+        result_2 = integrate.quad(bath_integralfunction, 0+distance_to_signularity, upper_integral_limit,args=(t,sd,approximated),complex_func=True)
+        #i think i only need to integrate from 0 right??
+        # i need to check wether the arguments are correctly transmitted
+        
+        return bath_front_faktor *(result_1[0]+result_2[0])
 
 def bath_simple(t): 
         result_1 = integrate.quad(debye_simple_function, lower_integral_limit, 0-distance_to_signularity)
@@ -90,7 +98,7 @@ def bath_tau_set(sd,approximated,tau_range):
         sd = ultra_violet_cutoff_sd 
 
       t_values = numpy.arange(tau_range[0], tau_range[1],tau_range[2])
-      return [bath(t,sd,approximated) for t in t_values]
+      return [bath_imag(t,sd,approximated).imag for t in t_values]
 
 def debye_simple_function(x): 
       return debye_sd(x)*bose_closed(x)
@@ -128,6 +136,8 @@ def integrate_sampling(function,steps):
 if __name__ == "__main__":
       #print('main')
       #integrate_quad_test(integrate_function,5)
-        print("ohmic_laurent_numerics",end="=")
+        print("debye_closed_numerics_imag",end="=")
 
-        print(bath_tau_set("ohmic", True, [0,30.1,1]))
+        print(bath_tau_set("debye", False, [0,30.1,1]))
+        
+        #print(bath_imag(1, debye_sd, False).imag)

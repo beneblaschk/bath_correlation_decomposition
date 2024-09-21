@@ -37,7 +37,7 @@ def show(data, labels):
     file_name= f"{str(len(sys.argv)-1)}_{str(sys.argv[1])}.pdf"
 
     print(file_name)
-    folder_path = "/home/benne/Documents/Uni/ba/bath/plots/RQ1/"
+    folder_path = "/home/benne/Documents/Uni/ba/bath/plots/numeric_framework/"
     file_path = folder_path+file_name
 
 
@@ -46,7 +46,7 @@ def show(data, labels):
     plt.show()
 if __name__ == "__main__":
     print('main')
-    mode = 10
+    mode = 11
     if mode ==1:
 
         data = [0,0,0,0]
@@ -135,6 +135,57 @@ if __name__ == "__main__":
         print(data[1])
         print(len(data[0]))
         print(len(data[1]))
+    if mode == 9:
+        label=[""]*8
+        data= [0]*8
+        label[0] = "debye_closed_numerics_a=-1_b=1_e=0.01"
+        data[0]  = ds.debye_closed_numerics_1
+        label[1] = "debye_closed_numerics_a=-2_b=2_e=0.01"
+        data[1]  = ds.debye_closed_numerics_2
+        label[2] = "debye_closed_numerics_a=-4_b=4_e=0.01"
+        data[2]  = ds.debye_closed_numerics_4
+        label[3] = "debye_closed_numerics_a=-8_b=8_e=0.01"
+        data[3]  = ds.debye_closed_numerics_8
+        label[4] = "debye_closed_numerics_a=-16_b=16_e=0.01"
+        data[4]  = ds.debye_closed_numerics_16
+        label[5] = "debye_closed_numerics_a=-32_b=32_e=0.01"
+        data[5]  = ds.debye_closed_numerics_32  
+        label[6] = "debye_closed_numerics_a=-64_b=64_e=0.01"
+        data[6]  = ds.debye_closed_numerics_64
+        label[7] = "debye_closed_numerics_a=-128_b=128_e=0.01"
+        data[7]  = ds.debye_closed_numerics_128
+        show(data,label)
+        exit
+    if mode==10:
+        label=[""]*3
+        data= [0]*3
+        label[0] = "debye_closed_numerics_a=-16_b=16_e=0.01"
+        data[0]  = ds.debye_closed_numerics_16
+        label[1] = "debye_closed_numerics_a=-64_b=64_e=0.01"
+        data[1]  = ds.debye_closed_numerics_64
+        label[2] = "debye_closed_numerics_a=-128_b=128_e=0.01"
+        data[2]  = ds.debye_closed_numerics_128
+        show(data,label)
+        exit
+    if mode == 11:
+        label=[""]*7
+        data= [0]*7
+        label[0] = "debye_closed_numerics_a=-16_b=16_e=0.1"
+        data[0]  = ds.debye_closed_numerics_e_0_1
+        label[1] = "debye_closed_numerics_a=-16_b=16_e=0.05"
+        data[1]  = ds.debye_closed_numerics_e_0_05
+        label[2] = "debye_closed_numerics_a=-16_b=16_e=0.01"
+        data[2]  = ds.debye_closed_numerics_e_0_01
+        label[3] = "debye_closed_numerics_a=-16_b=16_e=0.005"
+        data[3]  = ds.debye_closed_numerics_e_0_005
+        label[4] = "debye_closed_numerics_a=-16_b=16_e=0.001"
+        data[4]  = ds.debye_closed_numerics_e_0_001
+        label[5] = "debye_closed_numerics_a=-16_b=16_e=0.0005"
+        data[5]  = ds.debye_closed_numerics_e_0_0005
+        label[6] = "debye_closed_numerics_a=-16_b=16_e=0.0001"
+        data[6]  = ds.debye_closed_numerics_e_0_0001
+        show(data,label)
+        exit(0)
     number_graphs = len(sys.argv)-1
     label = [""]*number_graphs
     data = [0] *number_graphs
@@ -143,7 +194,8 @@ if __name__ == "__main__":
         label[i] = value
         match value:
             case "debye_closed_numerics":
-                data[i] = ds.debye_closed_numerics
+                #data[i] = ds.debye_closed_numerics
+                data[i] = ds.debye_closed_numerics_16
             case "debye_closed_residuals":
                 data[i] = ds.debye_closed_residuals
             case "debye_approxed_numerics":
@@ -158,6 +210,8 @@ if __name__ == "__main__":
                 data[i] = ds.ohmic_laurent_numerics
             case "ohmic_approxed_residuals":
                 exit
+            case "debye_laurent_residual":
+                data[i] = ds.debye_laurent_residual
             case "debye_closed_residuals_imag":
                 data[i] = ds.debye_closed_residuals_imag
             case "debye_closed_numerics_imag":
@@ -195,9 +249,9 @@ if __name__ == "__main__":
             case _:
                 print("error")
                 exit
-    print(number_graphs)
-    print(data)
-    print(label)
-    print(len(data[0]))
+    # print(number_graphs)
+    # print(data)
+    # print(label)
+    # print(len(data[0]))
 
     show(data,label)
