@@ -1,5 +1,5 @@
 import numpy
-import universal_plot
+#import universal_plot
 #git_upload
 
 im = 1j
@@ -51,7 +51,7 @@ def residual_debye_closed_mod_4(t):
 def residual_debye_closed_mod_5(t):
 
     # k starting from 1 -> inftly can be selected here 
-    k=5
+    k=1
     
     return eta * (4 * numpy.pi*k* gamma)/(4 * numpy.pi**2* k**2+gamma**2) * numpy.exp(-2*numpy.pi* k*t)      
 
@@ -69,13 +69,17 @@ def residual_debye_closed_simplified(t):
 
 def residual_debye_laurent(t):
     k_values = numpy.arange(n+1)
-    return eta/2 * numpy.exp(-gamma*t)
+    return (eta/2+1j *4*gamma/4) * numpy.exp(-gamma*t)
 
     #return numpy.exp(gamma*t)*eta*(0.5*gamma/2*numpy.sum(a * ((-1)**(k_values+1))*(gamma**(2*k_values)+1)))
-
+Omega = 0.4
 def residual_ohmic_closed(t):
+    K=1
     k_values = numpy.arange(K+1)
-    return -4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp((-2*numpy.pi*k_values*t) - 1j *(2*numpy.pi*k_values)/Omega))
+    #return -4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp((-2*numpy.pi*k_values*t) - 1j *(2*numpy.pi*k_values)/Omega))
+    #return -4 * numpy.pi**2 * numpy.sum(k_values*numpy.exp((-2*numpy.pi*k_values*(1/Omega+t))))
+    return numpy.sum(k_values*numpy.pi*numpy.exp(-2*numpy.pi*k_values/Omega)*numpy.exp(-2*numpy.pi*k_values*t))
+
 
 def residual_singualarity_check(t): 
     k_values = numpy.arange(1,K+1)
@@ -87,6 +91,9 @@ def residual_singualartiy_check2(t):
     k_values = numpy.arange(1,K+1)
     print('singu2')
     return numpy.sum(1/(k_values) * numpy.exp(-2*numpy.pi * k_values))
+
+def residual_ohmicexp(x) : 
+    return 2*3/2*4 * numpy.exp(-3*x)
 
 
 def bath(t,sd,approximated):
@@ -108,6 +115,8 @@ def bath(t,sd,approximated):
     if sd=="singularity_check2":
         print('singu2')
         calculator = residual_singualartiy_check2
+    if sd=="ohmicexp":
+        calculator = residual_ohmicexp
     if sd=="debye_first_term":
         calculator = residual_debye_closed_first_term
     if sd=="debye_mod_1":
@@ -142,6 +151,7 @@ def calculate_bath_tau_set(sd, approximated, tau_range):
     return [bath(t,sd,approximated).real for t in t_values] 
 
 if __name__ == "__main__":
-    print("debye_laurent_residual",end="=")
+    
+    print("ohmic_closed_residual",end="=")
     #print(residual_debye_closed_first_term(0))
-    print(calculate_bath_tau_set("debye_laurent", False, [0,30.1,1]))
+    print(calculate_bath_tau_set("ohmic", False, [0,30.1,1]))

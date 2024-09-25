@@ -15,7 +15,7 @@ x, y = sympy.symbols('x y')
 #for the integral
 lower_integral_limit = -16
 upper_integral_limit = - lower_integral_limit
-distance_to_signularity = 0.01
+distance_to_signularity = 0.0001
 # 0.1 -> 0.05 -> 0.01 -> 0.005 -> 0.001 -> 0.0005 -> 0.0001
 bath_front_faktor = 1/(numpy.pi)
 #bath_front_faktor = 1
@@ -23,13 +23,17 @@ Omega = 0.4
 
 start_table_string ="\\begin{array}{|c|c|}\\hline\\tau & \\alpha\\\\"
 end_table_string = "\\hline\\end{array}"
-
+eta = 2
+gamma = 3
 
 def debye_sd (w) : 
       return 0.5 * (0.25*w)/(w**2+0.25**2)
 
 def ohmic_sd (x) : 
       return numpy.pi*x*numpy.exp(-abs(x/Omega))
+
+def ohmic_exp(x) :
+        return (eta*x*numpy.exp(-abs(x))*gamma)/(x**2+gamma**2)
 
 def ultra_violet_cutoff_sd (x) :
       #return numpy.exp(2) *x *(0.6 - x)
@@ -96,6 +100,8 @@ def bath_tau_set(sd,approximated,tau_range):
         sd = ohmic_sd
       if sd=="ultra_violet_cutoff":
         sd = ultra_violet_cutoff_sd 
+      if sd=="ohmic_exp":
+           sd = ohmic_exp
 
       t_values = numpy.arange(tau_range[0], tau_range[1],tau_range[2])
       return [bath_imag(t,sd,approximated).imag for t in t_values]
@@ -136,8 +142,8 @@ def integrate_sampling(function,steps):
 if __name__ == "__main__":
       #print('main')
       #integrate_quad_test(integrate_function,5)
-        print("debye_closed_numerics_imag",end="=")
+        print("ohmic_closed_numerics_16",end="=")
 
-        print(bath_tau_set("debye", False, [0,30.1,1]))
+        print(bath_tau_set("ohmic", False, [0,30.1,1]))
         
         #print(bath_imag(1, debye_sd, False).imag)
